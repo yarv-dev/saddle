@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { open } from '@tauri-apps/plugin-dialog';
 import { ComponentCard } from '../components/ComponentCard';
+import { ProjectSetupWizard } from '../components/ProjectSetupWizard';
 import { loadProject } from '../lib/tauri';
 import type { ProjectStructure } from '../types/component';
 import styles from '../styles/GalleryView.module.css';
@@ -10,30 +11,46 @@ export function GalleryView() {
   const [project, setProject] = useState<ProjectStructure | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showWizard, setShowWizard] = useState(false);
+  const [projectRoot, setProjectRoot] = useState<string>('');
 
   const handleLoadProject = async () => {
     try {
-      setLoading(true);
-      setError(null);
-
       const selectedPath = await open({
         directory: true,
         multiple: false,
-        title: 'Select Component Library Root Directory',
+        title: 'Select Project Root Directory',
       });
 
       if (!selectedPath) {
-        setLoading(false);
         return;
       }
 
-      const loadedProject = await loadProject(selectedPath as string);
+      setProjectRoot(selectedPath as string);
+      setShowWizard(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to open file picker');
+    }
+  };
+
+  const handleWizardComplete = async (componentPath: string, extensions: string[]) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setShowWizard(false);
+
+      const loadedProject = await loadProject(projectRoot, componentPath, extensions);
       setProject(loadedProject);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load project');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleWizardCancel = () => {
+    setShowWizard(false);
+    setProjectRoot('');
   };
 
   if (!project && !loading) {
@@ -75,19 +92,28 @@ export function GalleryView() {
   }
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1>Component Gallery</h1>
-        <p className={styles.subtitle}>
-          {project?.components.length || 0} component{project?.components.length !== 1 ? 's' : ''}
-        </p>
-      </header>
+    <>
+      {showWizard && (
+        <ProjectSetupWizard
+          projectRoot={projectRoot}
+          onComplete={handleWizardComplete}
+          onCancel={handleWizardCancel}
+        />
+      )}
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <h1>Component Gallery</h1>
+          <p className={styles.subtitle}>
+            {project?.components.length || 0} component{project?.components.length !== 1 ? 's' : ''}
+          </p>
+        </header>
 
-      <div className={styles.grid}>
-        {project?.components.map((component, idx) => (
-          <ComponentCard key={idx} component={component} />
-        ))}
+        <div className={styles.grid}>
+          {project?.components.map((component, idx) => (
+            <ComponentCard key={idx} component={component} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

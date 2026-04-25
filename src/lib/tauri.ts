@@ -24,30 +24,37 @@ export async function parseComponentFile(content: string): Promise<ParsedFile> {
   return invoke<ParsedFile>('parse_component_file', { content });
 }
 
-export async function loadProject(rootPath: string): Promise<ProjectStructure> {
+export async function loadProject(
+  rootPath: string,
+  componentPath: string = 'src/components',
+  extensions: string[] = ['.tsx', '.jsx']
+): Promise<ProjectStructure> {
+  const fullComponentPath = `${rootPath}/${componentPath}`.replace(/\/+/g, '/');
   const files = await scanProjectDirectory(rootPath);
 
   console.log('Total files scanned:', files.length);
   console.log('Root path:', rootPath);
+  console.log('Component path:', componentPath);
+  console.log('Extensions:', extensions);
 
-  // Find component directories (look in src/components/ or components/)
+  // Find component directories within the specified path
   const componentDirs = files.filter(f => {
-    const hasComponents = f.path.includes('/components/') || f.path.includes('\\components\\');
+    const isInComponentPath = f.path.startsWith(fullComponentPath);
     const isDir = f.is_dir;
-    const notComponentsDir = f.name !== 'components' && f.name !== 'src';
-    return isDir && hasComponents && notComponentsDir;
+    const notRootDir = f.path !== fullComponentPath;
+    return isDir && isInComponentPath && notRootDir;
   });
 
-  console.log('Component directories found:', componentDirs.length, componentDirs.map(d => d.name));
+  console.log('Component directories found:', componentDirs.length, componentDirs.map(d => ({ name: d.name, path: d.path })));
 
   const components: Component[] = [];
 
   for (const dir of componentDirs) {
-    const componentFiles = files.filter(f =>
-      !f.is_dir &&
-      f.path.startsWith(dir.path) &&
-      f.name.endsWith('.tsx')
-    );
+    const componentFiles = files.filter(f => {
+      if (f.is_dir) return false;
+      if (!f.path.startsWith(dir.path)) return false;
+      return extensions.some(ext => f.name.endsWith(ext));
+    });
 
     console.log(`Files in ${dir.name}:`, componentFiles.length, componentFiles.map(f => f.name));
 

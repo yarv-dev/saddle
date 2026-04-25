@@ -1,0 +1,154 @@
+.wizard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.content {
+  background: var(--color-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  max-width: 600px;
+  width: 90%;
+  box-shadow: var(--shadow-md);
+}
+
+.content h2 {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.projectPath {
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: var(--font-size-small);
+  color: var(--color-subtext);
+  font-family: var(--font-code);
+  background: var(--color-surface);
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.section h3 {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-heading);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.radioGroup,
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.radioLabel,
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.radioLabel:hover,
+.checkboxLabel:hover {
+  background: var(--color-surface);
+}
+
+.radioLabel input,
+.checkboxLabel input {
+  cursor: pointer;
+}
+
+.radioLabel span,
+.checkboxLabel span {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: var(--font-code);
+  font-size: var(--font-size-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  margin-top: var(--spacing-sm);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.note {
+  margin: var(--spacing-sm) 0;
+  font-size: var(--font-size-small);
+  color: var(--color-subtext);
+  font-style: italic;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.cancelButton,
+.completeButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.cancelButton:hover {
+  background: var(--color-overlay);
+}
+
+.completeButton {
+  background: var(--color-brand);
+  color: white;
+}
+
+.completeButton:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.completeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
