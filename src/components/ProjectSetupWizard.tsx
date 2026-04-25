@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { scanProjectDirectory } from '../lib/tauri';
-import type { FileInfo } from '../lib/tauri';
 import styles from './ProjectSetupWizard.module.css';
 
 interface ProjectSetupWizardProps {

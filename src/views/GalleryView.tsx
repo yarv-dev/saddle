@@ -59,7 +59,7 @@ export function GalleryView() {
     setProjectRoot('');
   };
 
-  if (!project && !loading) {
+  if (!project && !loading && !showWizard) {
     return (
       <div className={styles.container}>
         <div className={styles.empty}>
