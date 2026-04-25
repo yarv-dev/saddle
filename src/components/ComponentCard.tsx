@@ -3,11 +3,12 @@ import styles from './ComponentCard.module.css';
 
 interface ComponentCardProps {
   component: Component;
+  onClick?: () => void;
 }
 
-export function ComponentCard({ component }: ComponentCardProps) {
+export function ComponentCard({ component, onClick }: ComponentCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <div className={styles.header}>
         <h3 className={styles.name}>{component.name}</h3>
         <span className={styles.variantCount}>

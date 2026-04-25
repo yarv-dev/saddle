@@ -4,7 +4,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { ComponentCard } from '../components/ComponentCard';
 import { ProjectSetupWizard } from '../components/ProjectSetupWizard';
 import { loadProject } from '../lib/tauri';
-import type { ProjectStructure } from '../types/component';
+import type { ProjectStructure, Component } from '../types/component';
 import styles from '../styles/GalleryView.module.css';
 
 export function GalleryView() {
@@ -13,6 +13,7 @@ export function GalleryView() {
   const [error, setError] = useState<string | null>(null);
   const [showWizard, setShowWizard] = useState(false);
   const [projectRoot, setProjectRoot] = useState<string>('');
+  const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
 
   const handleLoadProject = async () => {
     try {
@@ -134,9 +135,19 @@ export function GalleryView() {
         </header>
 
         <div className={styles.grid}>
-          {project?.components.map((component, idx) => (
-            <ComponentCard key={idx} component={component} />
-          ))}
+          {project?.components.map((component, idx) => {
+            console.log('Rendering component card:', component.name, component);
+            return (
+              <ComponentCard
+                key={idx}
+                component={component}
+                onClick={() => {
+                  console.log('Component clicked:', component.name);
+                  setSelectedComponent(component);
+                }}
+              />
+            );
+          })}
         </div>
       </div>
     </>
