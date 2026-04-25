@@ -42,6 +42,7 @@ export async function loadProject(
   console.log('Component path:', normalizedComponentPath);
   console.log('Full component path:', fullComponentPath);
   console.log('Extensions:', extensions);
+  console.log('All scanned files:', files.map(f => ({ path: f.path, name: f.name, isDir: f.is_dir })));
 
   // Find component directories within the specified path
   const componentDirs = files.filter(f => {
