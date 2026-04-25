@@ -34,13 +34,16 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
     }}>
       <header style={{ padding: '16px', flexShrink: 0, borderBottom: '1px solid var(--color-border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 24,
-            height: 24,
-            borderRadius: 6,
-            background: 'linear-gradient(135deg, #007AFF, #5856D6)',
-            boxShadow: 'var(--elevation-1)',
-          }} />
+          <img
+            src="/saddle-logo.png"
+            alt="Saddle"
+            style={{
+              width: 24,
+              height: 24,
+              borderRadius: 6,
+              boxShadow: 'var(--elevation-1)',
+            }}
+          />
           <div>
             <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-fg)' }}>Saddle</div>
             {project && (

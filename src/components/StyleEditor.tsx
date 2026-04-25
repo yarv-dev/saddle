@@ -169,6 +169,11 @@ export function StyleEditor({ tokens, code, onTokenChange }: StyleEditorProps) {
                     value={allValues[prop]}
                     isToken={tokens.hasOwnProperty(prop)}
                     onChange={(v) => onTokenChange(prop, v)}
+                    onRemove={tokens.hasOwnProperty(prop) ? () => {
+                      const next = { ...tokens };
+                      delete next[prop];
+                      onTokenChange('__remove__' + prop, '');
+                    } : undefined}
                   />
                 ))}
 
@@ -234,11 +239,12 @@ export function StyleEditor({ tokens, code, onTokenChange }: StyleEditorProps) {
   );
 }
 
-function PropertyRow({ name, value, isToken, onChange }: {
+function PropertyRow({ name, value, isToken, onChange, onRemove }: {
   name: string;
   value: string;
   isToken: boolean;
   onChange: (v: string) => void;
+  onRemove?: () => void;
 }) {
   const slot = detectTokenSlot(name, value);
   const isColor = slot === 'color';
@@ -296,6 +302,30 @@ function PropertyRow({ name, value, isToken, onChange }: {
       {/* Token picker */}
       {isToken && slot && (
         <TokenPicker slot={slot} value={value} onPick={(v) => onChange(v)} />
+      )}
+
+      {/* Remove button */}
+      {isToken && onRemove && (
+        <button
+          onClick={onRemove}
+          title="Remove property"
+          style={{
+            width: 20, height: 20,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            borderRadius: 3,
+            cursor: 'pointer',
+            color: 'var(--color-fg-subtle)',
+            fontSize: 14,
+            lineHeight: 1,
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-danger)'; e.currentTarget.style.background = 'rgba(255,59,48,0.08)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-fg-subtle)'; e.currentTarget.style.background = 'transparent'; }}
+        >
+          x
+        </button>
       )}
     </div>
   );
