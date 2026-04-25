@@ -2,10 +2,12 @@
 mod file_operations;
 mod frontmatter_parser;
 mod config_loader;
+mod mcp_server;
 
 use file_operations::{scan_directory, read_file, update_component_tokens, FileInfo};
 use frontmatter_parser::{parse_frontmatter, ParsedFile};
 use config_loader::{load_config, SaddleConfig};
+use mcp_server::{get_available_tools, MCPTool};
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -37,6 +39,11 @@ fn load_global_config(project_root: String) -> Result<SaddleConfig, String> {
     load_config(&project_root)
 }
 
+#[tauri::command]
+fn get_mcp_tools() -> Vec<MCPTool> {
+    get_available_tools()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -48,7 +55,8 @@ pub fn run() {
             read_component_file,
             parse_component_file,
             update_tokens,
-            load_global_config
+            load_global_config,
+            get_mcp_tools
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
