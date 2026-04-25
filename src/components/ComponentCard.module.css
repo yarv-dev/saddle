@@ -1,0 +1,61 @@
+/* src/components/ComponentCard.module.css */
+.card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-heading);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.variantCount {
+  font-size: var(--font-size-small);
+  color: var(--color-subtext);
+  font-weight: 500;
+}
+
+.variants {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.variant {
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border-radius: calc(var(--border-radius) / 2);
+}
+
+.variantName {
+  font-weight: 600;
+  color: var(--color-accent);
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.description {
+  margin: 4px 0 0 0;
+  font-size: var(--font-size-small);
+  color: var(--color-subtext);
+  line-height: 1.4;
+}
