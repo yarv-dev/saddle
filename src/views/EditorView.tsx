@@ -26,7 +26,6 @@ export function EditorView({ component, onBack }: EditorViewProps) {
   const [localTokens, setLocalTokens] = useState<Record<string, string>>({});
   const selectedVariant = component.variants[selectedVariantIndex];
 
-  // Initialize local tokens from variant
   useEffect(() => {
     if (selectedVariant.frontmatter?.tokens) {
       setLocalTokens(selectedVariant.frontmatter.tokens);
@@ -36,159 +35,123 @@ export function EditorView({ component, onBack }: EditorViewProps) {
   const handleTokenChange = async (tokenName: string, value: string) => {
     const newTokens = { ...localTokens, [tokenName]: value };
     setLocalTokens(newTokens);
-
     try {
       await updateTokens(selectedVariant.filePath, newTokens);
-      console.log('✓ Tokens saved to', selectedVariant.filePath);
     } catch (err) {
       console.error('Failed to save tokens:', err);
     }
   };
 
   return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden', flex: 1 }}>
-      {/* Center Stage */}
+    <div style={{ display: 'flex', height: '100%', flex: 1, overflow: 'hidden' }}>
+      {/* Center Stage - Preview */}
       <main style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--color-stage)' }}>
-        {/* Header */}
-        <header
-          style={{
-            flexShrink: 0,
-            padding: '18px 28px',
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-            borderBottom: '1px solid var(--color-border)',
-            background: 'var(--color-surface-elev)',
-            backdropFilter: 'saturate(180%) blur(18px)',
-            WebkitBackdropFilter: 'saturate(180%) blur(18px)',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-            <button
-              onClick={onBack}
-              style={{
-                padding: '4px 10px',
-                background: 'transparent',
-                color: 'var(--color-primary)',
-                border: 'none',
-                fontSize: 12,
-                cursor: 'pointer',
-                fontWeight: 500,
-              }}
-            >
-              ← Back
-            </button>
-            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 600, letterSpacing: '-0.015em', color: 'var(--color-fg)' }}>
-              {component.name}
-            </h2>
+        {/* Variant bar */}
+        <div style={{
+          padding: '12px 20px',
+          borderBottom: '1px solid var(--color-border)',
+          background: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {component.variants.map((variant, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedVariantIndex(idx)}
+                style={{
+                  height: 28,
+                  padding: '0 12px',
+                  background: idx === selectedVariantIndex ? 'var(--color-primary)' : '#ffffff',
+                  color: idx === selectedVariantIndex ? '#ffffff' : 'var(--color-fg)',
+                  border: idx === selectedVariantIndex ? 'none' : '1px solid var(--color-border)',
+                  borderRadius: 6,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'all 100ms ease',
+                }}
+              >
+                {variant.variantName}
+              </button>
+            ))}
           </div>
           <div style={{ fontSize: 11, color: 'var(--color-fg-muted)' }}>
-            {component.variants.length} variant{component.variants.length !== 1 ? 's' : ''}
+            {component.name}
           </div>
-        </header>
+        </div>
 
-        {/* Variant Selector */}
-        {component.variants.length > 1 && (
-          <div style={{ padding: '12px 28px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface)' }}>
-            <div style={{ display: 'flex', gap: 6 }}>
-              {component.variants.map((variant, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedVariantIndex(idx)}
-                  style={{
-                    padding: '6px 14px',
-                    background: idx === selectedVariantIndex ? 'var(--color-primary)' : 'transparent',
-                    color: idx === selectedVariantIndex ? '#ffffff' : 'var(--color-fg)',
-                    border: '1px solid ' + (idx === selectedVariantIndex ? 'var(--color-primary)' : 'var(--color-border)'),
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: 12,
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 120ms ease',
-                  }}
-                >
-                  {variant.variantName}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Preview Area */}
-        <div style={{ flex: 1, padding: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ maxWidth: 800, width: '100%', height: '100%', minHeight: 400 }}>
-            <ComponentPreview
-              code={selectedVariant.code}
-              frontmatter={selectedVariant.frontmatter}
-            />
-          </div>
+        {/* Preview */}
+        <div style={{ flex: 1, padding: 20 }}>
+          <ComponentPreview
+            code={selectedVariant.code}
+            frontmatter={selectedVariant.frontmatter}
+          />
         </div>
       </main>
 
-      {/* Right Panel (Inspector) */}
-      <aside
-        style={{
-          width: 360,
+      {/* Right Panel - Inspector */}
+      <aside style={{
+        width: 320,
+        flexShrink: 0,
+        height: '100%',
+        background: '#ffffff',
+        borderLeft: '1px solid var(--color-border)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        {/* Tabs */}
+        <header style={{
+          padding: '0 16px',
+          borderBottom: '1px solid var(--color-border)',
           flexShrink: 0,
-          height: '100%',
-          background: 'var(--color-surface-elev)',
-          backdropFilter: 'saturate(180%) blur(20px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-          borderLeft: '1px solid var(--color-border)',
           display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-        }}
-      >
-        {/* Tab Header */}
-        <header style={{ padding: '12px 14px 0', borderBottom: '1px solid var(--color-border)', flexShrink: 0 }}>
-          <nav style={{ display: 'flex', gap: 2 }}>
-            {TABS.map((t) => {
-              const isActive = t.id === tab;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setTab(t.id)}
-                  style={{
-                    padding: '8px 12px',
-                    background: 'transparent',
-                    color: isActive ? 'var(--color-fg)' : 'var(--color-fg-muted)',
-                    border: 'none',
-                    borderBottom: `2px solid ${isActive ? 'var(--color-primary)' : 'transparent'}`,
-                    fontSize: 12,
-                    fontWeight: isActive ? 600 : 500,
-                    cursor: 'pointer',
-                    marginBottom: -1,
-                    transition: 'color 120ms ease',
-                  }}
-                >
-                  {t.label}
-                </button>
-              );
-            })}
-          </nav>
+          gap: 0,
+        }}>
+          {TABS.map((t) => {
+            const isActive = t.id === tab;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                style={{
+                  height: 40,
+                  padding: '0 12px',
+                  background: 'transparent',
+                  color: isActive ? 'var(--color-fg)' : 'var(--color-fg-muted)',
+                  border: 'none',
+                  borderBottom: `2px solid ${isActive ? 'var(--color-primary)' : 'transparent'}`,
+                  fontSize: 13,
+                  fontWeight: isActive ? 600 : 400,
+                  cursor: 'pointer',
+                  transition: 'color 100ms ease',
+                }}
+              >
+                {t.label}
+              </button>
+            );
+          })}
         </header>
 
         {/* Tab Content */}
-        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
+        <div style={{ flex: 1, overflowY: 'auto' }}>
           {tab === 'style' && (
-            <StyleEditor
-              tokens={localTokens}
-              onTokenChange={handleTokenChange}
-            />
+            <StyleEditor tokens={localTokens} code={selectedVariant.code} onTokenChange={handleTokenChange} />
           )}
 
           {tab === 'code' && (
-            <div style={{ padding: 14, display: 'flex', flexDirection: 'column', height: '100%', gap: 8 }}>
-              <div style={{ fontSize: 10, color: 'var(--color-fg-subtle)', fontFamily: 'var(--font-code)' }}>
-                {selectedVariant.filePath}
+            <div style={{ padding: 16, display: 'flex', flexDirection: 'column', height: '100%', gap: 8 }}>
+              <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', fontFamily: 'var(--font-code)' }}>
+                {selectedVariant.filePath.split('/').pop()}
               </div>
               <div style={{ flex: 1, minHeight: 400 }}>
                 <CodeEditor
                   value={selectedVariant.code}
                   language="typescript"
                   readOnly={false}
-                  onChange={(value) => console.log('Code changed')}
+                  onChange={() => {}}
                 />
               </div>
             </div>
@@ -198,34 +161,30 @@ export function EditorView({ component, onBack }: EditorViewProps) {
             <AIGuidanceEditor
               frontmatter={selectedVariant.frontmatter || {}}
               onUpdate={(field, value) => {
-                console.log(`AI guidance updated: ${field} = ${value}`);
-                // TODO: Save to frontmatter
+                console.log(`AI guidance: ${field} = ${value}`);
               }}
             />
           )}
 
           {tab === 'metadata' && selectedVariant.frontmatter && (
-            <div style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 10, color: 'var(--color-fg-subtle)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 10, fontWeight: 600 }}>
-                Component Metadata
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div>
-                  <div style={{ fontSize: 10, color: 'var(--color-fg-muted)', marginBottom: 4 }}>Name</div>
-                  <div style={{ fontSize: 12, color: 'var(--color-fg)' }}>{selectedVariant.frontmatter.name || 'N/A'}</div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 10, color: 'var(--color-fg-muted)', marginBottom: 4 }}>Description</div>
-                  <div style={{ fontSize: 12, color: 'var(--color-fg)', lineHeight: 1.5 }}>
-                    {selectedVariant.frontmatter.description || 'N/A'}
+            <div style={{ padding: 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {selectedVariant.frontmatter.name && (
+                  <div>
+                    <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', marginBottom: 4, fontWeight: 600 }}>Name</div>
+                    <div style={{ fontSize: 13, color: 'var(--color-fg)' }}>{selectedVariant.frontmatter.name}</div>
                   </div>
-                </div>
+                )}
+                {selectedVariant.frontmatter.description && (
+                  <div>
+                    <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', marginBottom: 4, fontWeight: 600 }}>Description</div>
+                    <div style={{ fontSize: 13, color: 'var(--color-fg)', lineHeight: 1.5 }}>{selectedVariant.frontmatter.description}</div>
+                  </div>
+                )}
                 {selectedVariant.frontmatter.usage && (
                   <div>
-                    <div style={{ fontSize: 10, color: 'var(--color-fg-muted)', marginBottom: 4 }}>Usage Guidelines</div>
-                    <div style={{ fontSize: 12, color: 'var(--color-fg)', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
-                      {selectedVariant.frontmatter.usage}
-                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', marginBottom: 4, fontWeight: 600 }}>Usage</div>
+                    <div style={{ fontSize: 13, color: 'var(--color-fg)', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{selectedVariant.frontmatter.usage}</div>
                   </div>
                 )}
               </div>

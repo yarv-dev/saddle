@@ -144,32 +144,36 @@
 
 .cancelButton,
 .completeButton {
-  padding: 10px 20px;
+  height: 34px;
+  padding: 0 16px;
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 100ms ease;
 }
 
 .cancelButton {
-  background: var(--color-surface);
-  color: var(--color-text);
+  background: #ffffff;
+  color: var(--color-fg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--elevation-1);
 }
 
 .cancelButton:hover {
-  background: var(--color-overlay);
+  background: #f5f5f7;
 }
 
 .completeButton {
-  background: var(--color-brand);
+  background: var(--color-primary);
   color: white;
+  box-shadow: var(--elevation-1);
 }
 
 .completeButton:hover:not(:disabled) {
-  opacity: 0.85;
+  background: var(--color-primary-press);
 }
 
 .completeButton:disabled {

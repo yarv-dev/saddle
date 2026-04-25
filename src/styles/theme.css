@@ -1,82 +1,79 @@
-/* Obsidian-inspired design system */
+/* Apple Human Interface Guidelines design system */
 :root {
-  /* Obsidian Light Colors */
-  --color-primary: #8b5cf6;
-  --color-primary-press: #7c3aed;
+  /* Apple System Colors */
+  --color-primary: #007AFF;
+  --color-primary-press: #0062CC;
   --color-surface: #ffffff;
   --color-surface-elev: #fafafa;
-  --color-stage: #fafafa;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
+  --color-stage: #f5f5f7;
+  --color-success: #34C759;
+  --color-danger: #FF3B30;
+  --color-warning: #FF9500;
 
-  --color-fg: #18181b;
-  --color-fg-muted: #71717a;
-  --color-fg-subtle: #a1a1aa;
-  --color-border: #e4e4e7;
-  --color-border-strong: #d4d4d8;
+  --color-fg: #1d1d1f;
+  --color-fg-muted: #86868b;
+  --color-fg-subtle: #aeaeb2;
+  --color-border: #d1d1d6;
+  --color-border-strong: #c7c7cc;
 
   /* Legacy mappings */
-  --color-brand: #18181b;
-  --color-accent: #8b5cf6;
+  --color-brand: #1d1d1f;
+  --color-accent: #007AFF;
   --color-background: #ffffff;
-  --color-text: #18181b;
-  --color-subtext: #71717a;
-  --color-overlay: #fafafa;
-  --color-error: #ef4444;
+  --color-text: #1d1d1f;
+  --color-subtext: #86868b;
+  --color-overlay: #f5f5f7;
+  --color-error: #FF3B30;
 
-  /* Obsidian-style spacing (tighter) */
-  --space-xs: 2px;
-  --space-sm: 4px;
-  --space-md: 8px;
-  --space-lg: 12px;
-  --space-xl: 16px;
+  /* Apple HIG 8pt grid spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
 
-  /* Legacy spacing */
-  --spacing-xs: 2px;
-  --spacing-sm: 4px;
-  --spacing-md: 8px;
-  --spacing-lg: 12px;
-  --spacing-xl: 16px;
-
-  /* Obsidian radii (subtle) */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  /* Apple HIG radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
   --radius-xl: 12px;
   --radius-full: 9999px;
+  --border-radius: 8px;
 
-  /* Legacy radii */
-  --border-radius: 6px;
-  --rounded-none: 0px;
-  --rounded-sm: 4px;
-  --rounded-md: 6px;
-  --rounded-lg: 8px;
-  --rounded-full: 9999px;
+  /* Apple HIG typography scale */
+  --font-size-caption2: 11px;
+  --font-size-caption: 12px;
+  --font-size-body: 13px;
+  --font-size-subhead: 15px;
+  --font-size-headline: 17px;
+  --font-size-title3: 20px;
+  --font-size-title2: 22px;
+  --font-size-title1: 28px;
 
-  /* Obsidian typography */
-  --font-size-xs: 10px;
-  --font-size-sm: 11px;
-  --font-size-base: 12px;
+  /* Legacy font mappings */
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-small: 11px;
+  --font-size-base: 13px;
   --font-size-md: 13px;
-  --font-size-heading: 14px;
-  --font-size-lg: 14px;
-  --font-size-small: 10px;
-  --font-size-xl: 16px;
+  --font-size-heading: 15px;
+  --font-size-lg: 15px;
+  --font-size-xl: 17px;
 
-  /* Typography */
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  --font-code: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+  /* Apple system fonts */
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+  --font-code: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
 
-  /* Obsidian elevations (subtle) */
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --elevation-2: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --elevation-3: 0 4px 16px rgba(0, 0, 0, 0.12);
-  --elevation-focus: 0 0 0 2px rgba(139, 92, 246, 0.2);
+  /* Apple HIG elevations */
+  --elevation-1: 0 0.5px 2.5px rgba(0, 0, 0, 0.12);
+  --elevation-2: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --elevation-3: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --elevation-focus: 0 0 0 3px rgba(0, 122, 255, 0.25);
 
   /* Legacy shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 0.5px 2.5px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 html,
@@ -90,13 +87,12 @@ body,
 
 body {
   font-family: var(--font-body);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   color: var(--color-fg);
   background: var(--color-surface);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.003em;
-  line-height: 1.5;
+  line-height: 1.47;
 }
 
 * {
@@ -108,13 +104,7 @@ input,
 select,
 textarea {
   font-family: inherit;
-  letter-spacing: inherit;
   font-size: inherit;
-}
-
-input,
-textarea {
-  transition: box-shadow 120ms ease, border-color 120ms ease;
 }
 
 input:focus,
@@ -125,17 +115,16 @@ select:focus {
   border-color: var(--color-primary);
 }
 
-/* Minimal scrollbar (Obsidian style) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.25);
 }
 ::-webkit-scrollbar-track {
   background: transparent;

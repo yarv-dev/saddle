@@ -90,7 +90,7 @@ export function ComponentPreview({ code, frontmatter }: ComponentPreviewProps) {
           borderRadius: 8,
           background: '#ffffff',
         }}
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-same-origin"
         title="Component Preview"
       />
     </div>
