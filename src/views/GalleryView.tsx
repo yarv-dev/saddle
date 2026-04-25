@@ -4,6 +4,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { Sidebar } from '../components/Sidebar';
 import { ProjectSetupWizard } from '../components/ProjectSetupWizard';
 import { EditorView } from './EditorView';
+import { ExportView } from './ExportView';
 import { loadProject, loadGlobalConfig } from '../lib/tauri';
 import { loadTokensFromConfig } from '../tokens/tokens';
 import type { ProjectStructure, Component } from '../types/component';
@@ -16,6 +17,7 @@ export function GalleryView() {
   const [showWizard, setShowWizard] = useState(false);
   const [projectRoot, setProjectRoot] = useState<string>('');
   const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
+  const [view, setView] = useState<'components' | 'export'>('components');
 
   const handleLoadProject = async () => {
     try {
@@ -130,12 +132,25 @@ export function GalleryView() {
       )}
       <Sidebar
         project={project}
-        onSelectComponent={setSelectedComponent}
+        onSelectComponent={(comp) => {
+          setSelectedComponent(comp);
+          setView('components');
+        }}
         selectedComponent={selectedComponent}
         onLoadProject={handleLoadProject}
         onConfigure={() => setShowWizard(true)}
+        onExport={() => {
+          setView('export');
+          setSelectedComponent(null);
+        }}
+        view={view}
       />
-      {selectedComponent ? (
+      {view === 'export' && project ? (
+        <ExportView
+          project={project}
+          onBack={() => setView('components')}
+        />
+      ) : selectedComponent ? (
         <EditorView
           component={selectedComponent}
           onBack={() => setSelectedComponent(null)}

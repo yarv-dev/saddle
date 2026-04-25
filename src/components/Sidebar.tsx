@@ -7,9 +7,11 @@ interface SidebarProps {
   selectedComponent: Component | null;
   onLoadProject: () => void;
   onConfigure: () => void;
+  onExport: () => void;
+  view: 'components' | 'export';
 }
 
-export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadProject, onConfigure }: SidebarProps) {
+export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadProject, onConfigure, onExport, view }: SidebarProps) {
   return (
     <aside
       style={{
@@ -72,14 +74,25 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
         )}
 
         {project && (
-          <Section label="Project">
-            <NavItem
-              label="Configure"
-              icon="⚙"
-              active={false}
-              onClick={onConfigure}
-            />
-          </Section>
+          <>
+            <Section label="Project">
+              <NavItem
+                label="Configure"
+                icon="⚙"
+                active={false}
+                onClick={onConfigure}
+              />
+            </Section>
+
+            <Section label="Ship">
+              <NavItem
+                label="Export"
+                icon="↗"
+                active={view === 'export'}
+                onClick={onExport}
+              />
+            </Section>
+          </>
         )}
       </nav>
 
