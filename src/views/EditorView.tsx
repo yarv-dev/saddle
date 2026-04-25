@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Component } from '../types/component';
 import { CodeEditor } from '../components/CodeEditor';
 import { StyleEditor } from '../components/StyleEditor';
+import { updateTokens } from '../lib/tauri';
 import styles from '../styles/EditorView.module.css';
 
 interface EditorViewProps {
@@ -12,11 +13,26 @@ interface EditorViewProps {
 export function EditorView({ component, onBack }: EditorViewProps) {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'style' | 'code' | 'metadata'>('style');
+  const [localTokens, setLocalTokens] = useState<Record<string, string>>({});
   const selectedVariant = component.variants[selectedVariantIndex];
 
-  const handleTokenChange = (tokenName: string, value: string) => {
-    console.log('Token changed:', tokenName, value);
-    // TODO: Update frontmatter and regenerate CSS
+  // Initialize local tokens from variant
+  useState(() => {
+    if (selectedVariant.frontmatter?.tokens) {
+      setLocalTokens(selectedVariant.frontmatter.tokens);
+    }
+  });
+
+  const handleTokenChange = async (tokenName: string, value: string) => {
+    const newTokens = { ...localTokens, [tokenName]: value };
+    setLocalTokens(newTokens);
+
+    try {
+      await updateTokens(selectedVariant.filePath, newTokens);
+      console.log('✓ Tokens saved to', selectedVariant.filePath);
+    } catch (err) {
+      console.error('Failed to save tokens:', err);
+    }
   };
 
   return (
@@ -86,7 +102,7 @@ export function EditorView({ component, onBack }: EditorViewProps) {
             {activeTab === 'style' && (
               <div className={styles.stylePanel}>
                 <StyleEditor
-                  tokens={selectedVariant.frontmatter?.tokens || {}}
+                  tokens={localTokens}
                   onTokenChange={handleTokenChange}
                 />
               </div>

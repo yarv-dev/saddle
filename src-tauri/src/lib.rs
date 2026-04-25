@@ -2,7 +2,7 @@
 mod file_operations;
 mod frontmatter_parser;
 
-use file_operations::{scan_directory, read_file, FileInfo};
+use file_operations::{scan_directory, read_file, update_component_tokens, FileInfo};
 use frontmatter_parser::{parse_frontmatter, ParsedFile};
 
 #[tauri::command]
@@ -25,6 +25,11 @@ fn parse_component_file(content: String) -> Result<ParsedFile, String> {
     parse_frontmatter(&content)
 }
 
+#[tauri::command]
+fn update_tokens(file_path: String, tokens_json: String) -> Result<(), String> {
+    update_component_tokens(&file_path, &tokens_json)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -34,7 +39,8 @@ pub fn run() {
             greet,
             scan_project_directory,
             read_component_file,
-            parse_component_file
+            parse_component_file,
+            update_tokens
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

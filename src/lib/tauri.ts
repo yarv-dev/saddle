@@ -24,6 +24,11 @@ export async function parseComponentFile(content: string): Promise<ParsedFile> {
   return invoke<ParsedFile>('parse_component_file', { content });
 }
 
+export async function updateTokens(filePath: string, tokens: Record<string, string>): Promise<void> {
+  const tokensJson = JSON.stringify(tokens);
+  return invoke<void>('update_tokens', { filePath, tokensJson });
+}
+
 export async function loadProject(
   rootPath: string,
   componentPath: string = 'src/components',
