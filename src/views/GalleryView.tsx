@@ -1,7 +1,7 @@
 // src/views/GalleryView.tsx
 import { useState } from 'react';
 import { open } from '@tauri-apps/plugin-dialog';
-import { ComponentCard } from '../components/ComponentCard';
+import { Sidebar } from '../components/Sidebar';
 import { ProjectSetupWizard } from '../components/ProjectSetupWizard';
 import { EditorView } from './EditorView';
 import { loadProject, loadGlobalConfig } from '../lib/tauri';
@@ -119,16 +119,6 @@ export function GalleryView() {
     );
   }
 
-  // If a component is selected, show the editor view
-  if (selectedComponent) {
-    return (
-      <EditorView
-        component={selectedComponent}
-        onBack={() => setSelectedComponent(null)}
-      />
-    );
-  }
-
   return (
     <>
       {showWizard && (
@@ -138,39 +128,41 @@ export function GalleryView() {
           onCancel={handleWizardCancel}
         />
       )}
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <div className={styles.headerContent}>
-            <div>
-              <h1>Component Gallery</h1>
-              <p className={styles.subtitle}>
-                {project?.components.length || 0} component{project?.components.length !== 1 ? 's' : ''}
-              </p>
-            </div>
-            {project && (
-              <button onClick={() => { setShowWizard(true); }} className={styles.settingsButton}>
-                Configure Project
-              </button>
+      <Sidebar
+        project={project}
+        onSelectComponent={setSelectedComponent}
+        selectedComponent={selectedComponent}
+      />
+      {selectedComponent ? (
+        <EditorView
+          component={selectedComponent}
+          onBack={() => setSelectedComponent(null)}
+        />
+      ) : (
+        <div className={styles.emptyStage}>
+          <div className={styles.emptyContent}>
+            {!project ? (
+              <>
+                <h2>No Project Loaded</h2>
+                <p>Select a component library to get started</p>
+                <button onClick={handleLoadProject} className={styles.button}>
+                  Load Project
+                </button>
+              </>
+            ) : (
+              <>
+                <h2>Select a Component</h2>
+                <p>Choose a component from the sidebar to view and edit</p>
+                {project && (
+                  <button onClick={() => { setShowWizard(true); }} className={styles.settingsButton}>
+                    Configure Project
+                  </button>
+                )}
+              </>
             )}
           </div>
-        </header>
-
-        <div className={styles.grid}>
-          {project?.components.map((component, idx) => {
-            console.log('Rendering component card:', component.name, component);
-            return (
-              <ComponentCard
-                key={idx}
-                component={component}
-                onClick={() => {
-                  console.log('Component clicked:', component.name);
-                  setSelectedComponent(component);
-                }}
-              />
-            );
-          })}
         </div>
-      </div>
+      )}
     </>
   );
 }

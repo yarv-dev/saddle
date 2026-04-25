@@ -1,0 +1,86 @@
+.sidebar {
+  width: 240px;
+  height: 100%;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.header {
+  padding: 18px 16px 12px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-fg);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.count {
+  font-size: 11px;
+  color: var(--color-fg-muted);
+  font-weight: 500;
+}
+
+.componentList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.componentItem {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease;
+  margin-bottom: 2px;
+}
+
+.componentItem:hover {
+  background: var(--color-overlay);
+}
+
+.componentItem.active {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.componentName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-fg);
+  margin-bottom: 2px;
+}
+
+.componentItem.active .componentName {
+  color: #ffffff;
+}
+
+.variantCount {
+  font-size: 11px;
+  color: var(--color-fg-muted);
+}
+
+.componentItem.active .variantCount {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--color-fg-subtle);
+  font-size: 12px;
+}
