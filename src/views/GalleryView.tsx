@@ -132,6 +132,8 @@ export function GalleryView() {
         project={project}
         onSelectComponent={setSelectedComponent}
         selectedComponent={selectedComponent}
+        onLoadProject={handleLoadProject}
+        onConfigure={() => setShowWizard(true)}
       />
       {selectedComponent ? (
         <EditorView
