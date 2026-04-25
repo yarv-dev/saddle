@@ -4,7 +4,8 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { ComponentCard } from '../components/ComponentCard';
 import { ProjectSetupWizard } from '../components/ProjectSetupWizard';
 import { EditorView } from './EditorView';
-import { loadProject } from '../lib/tauri';
+import { loadProject, loadGlobalConfig } from '../lib/tauri';
+import { loadTokensFromConfig } from '../tokens/tokens';
 import type { ProjectStructure, Component } from '../types/component';
 import styles from '../styles/GalleryView.module.css';
 
@@ -54,6 +55,15 @@ export function GalleryView() {
       console.log('Loading project...');
       const loadedProject = await loadProject(projectRoot, componentPath, extensions);
       console.log('Project loaded:', loadedProject);
+
+      // Load global tokens
+      try {
+        const config = await loadGlobalConfig(projectRoot);
+        loadTokensFromConfig(config.tokens);
+        console.log('✓ Global tokens loaded from saddle.config.json');
+      } catch (err) {
+        console.warn('No saddle.config.json found, using default tokens');
+      }
 
       setProject(loadedProject);
       console.log('State updated');

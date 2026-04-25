@@ -1,9 +1,11 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod file_operations;
 mod frontmatter_parser;
+mod config_loader;
 
 use file_operations::{scan_directory, read_file, update_component_tokens, FileInfo};
 use frontmatter_parser::{parse_frontmatter, ParsedFile};
+use config_loader::{load_config, SaddleConfig};
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -30,6 +32,11 @@ fn update_tokens(file_path: String, tokens_json: String) -> Result<(), String> {
     update_component_tokens(&file_path, &tokens_json)
 }
 
+#[tauri::command]
+fn load_global_config(project_root: String) -> Result<SaddleConfig, String> {
+    load_config(&project_root)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -40,7 +47,8 @@ pub fn run() {
             scan_project_directory,
             read_component_file,
             parse_component_file,
-            update_tokens
+            update_tokens,
+            load_global_config
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

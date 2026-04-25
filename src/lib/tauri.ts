@@ -29,6 +29,21 @@ export async function updateTokens(filePath: string, tokens: Record<string, stri
   return invoke<void>('update_tokens', { filePath, tokensJson });
 }
 
+export interface GlobalConfig {
+  name: string;
+  version: string;
+  tokens: {
+    colors: Record<string, string>;
+    spacing: Record<string, string>;
+    rounded: Record<string, string>;
+    fontSize: Record<string, string>;
+  };
+}
+
+export async function loadGlobalConfig(projectRoot: string): Promise<GlobalConfig> {
+  return invoke<GlobalConfig>('load_global_config', { projectRoot });
+}
+
 export async function loadProject(
   rootPath: string,
   componentPath: string = 'src/components',

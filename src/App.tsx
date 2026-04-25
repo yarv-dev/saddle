@@ -1,10 +1,17 @@
 // src/App.tsx
 import { GalleryView } from './views/GalleryView';
-import './App.css';
+import './styles/theme.css';
 
 function App() {
   return (
-    <div className="app">
+    <div
+      style={{
+        display: 'flex',
+        height: '100vh',
+        background: 'var(--color-surface)',
+        overflow: 'hidden',
+      }}
+    >
       <GalleryView />
     </div>
   );
