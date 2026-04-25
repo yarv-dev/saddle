@@ -41,14 +41,24 @@ export function GalleryView() {
 
   const handleWizardComplete = async (componentPath: string, extensions: string[]) => {
     try {
+      console.log('=== handleWizardComplete ===');
+      console.log('Component path:', componentPath);
+      console.log('Extensions:', extensions);
+
       setLoading(true);
       setError(null);
       setShowWizard(false);
 
+      console.log('Loading project...');
       const loadedProject = await loadProject(projectRoot, componentPath, extensions);
+      console.log('Project loaded:', loadedProject);
+
       setProject(loadedProject);
+      console.log('State updated');
     } catch (err) {
+      console.error('Error loading project:', err);
       setError(err instanceof Error ? err.message : 'Failed to load project');
+      setShowWizard(false);
     } finally {
       setLoading(false);
     }
