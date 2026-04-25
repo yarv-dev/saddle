@@ -43,14 +43,11 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
               objectFit: 'contain',
             }}
           />
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-fg)' }}>Saddle</div>
-            {project && (
-              <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', marginTop: 1 }}>
-                {project.rootPath.split('/').pop()}
-              </div>
-            )}
-          </div>
+          {project && (
+            <div style={{ fontSize: 11, color: 'var(--color-fg-muted)' }}>
+              {project.rootPath.split('/').pop()}
+            </div>
+          )}
         </div>
       </header>
 
