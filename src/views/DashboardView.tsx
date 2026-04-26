@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ProjectStructure } from '../types/component';
+import { writeComponentFile } from '../lib/tauri';
 
 interface DashboardViewProps {
   project: ProjectStructure;
@@ -133,17 +134,11 @@ export function DashboardView({ project, projectRoot }: DashboardViewProps) {
           </Card>
 
           {/* MCP Integration */}
-          <Card title="Claude Code (MCP)">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <div style={statusDot(mcpStatus)} />
-              <span style={{ fontSize: 13, color: 'var(--color-fg)' }}>
-                {mcpStatus === 'connected' ? 'Connected' : 'Disconnected'}
-              </span>
-            </div>
-            <p style={{ fontSize: 12, color: 'var(--color-fg-muted)', lineHeight: 1.5, margin: 0 }}>
-              Saddle exposes an MCP server for Claude Code integration. Connect via Claude Code settings to enable bidirectional component editing.
-            </p>
-          </Card>
+          <MCPSetupCard
+            projectRoot={projectRoot}
+            mcpStatus={mcpStatus}
+            statusDot={statusDot}
+          />
 
           {/* Token Stats */}
           <Card title="Design Tokens">
@@ -170,6 +165,191 @@ export function DashboardView({ project, projectRoot }: DashboardViewProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+function MCPSetupCard({ projectRoot, mcpStatus, statusDot }: {
+  projectRoot: string;
+  mcpStatus: string;
+  statusDot: (s: string) => React.CSSProperties;
+}) {
+  const [installed, setInstalled] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const bridgePath = `${projectRoot}/node_modules/.bin/saddle-mcp`;
+  const mcpBridgeSrc = `${projectRoot}/mcp-bridge.mjs`;
+
+  const claudeCodeConfig = JSON.stringify({
+    mcpServers: {
+      saddle: {
+        command: 'node',
+        args: [mcpBridgeSrc],
+      },
+    },
+  }, null, 2);
+
+  const claudeDesktopConfig = JSON.stringify({
+    mcpServers: {
+      saddle: {
+        command: 'node',
+        args: [mcpBridgeSrc],
+      },
+    },
+  }, null, 2);
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  const handleInstallToClaudeCode = async () => {
+    // Write .mcp.json to project root for Claude Code auto-discovery
+    const mcpJson = JSON.stringify({
+      mcpServers: {
+        saddle: {
+          command: 'node',
+          args: ['mcp-bridge.mjs'],
+          cwd: projectRoot,
+        },
+      },
+    }, null, 2);
+
+    try {
+      await writeComponentFile(`${projectRoot}/.mcp.json`, mcpJson);
+      setInstalled(true);
+    } catch (err) {
+      alert(`Failed to write .mcp.json: ${err}`);
+    }
+  };
+
+  const handleInstallToClaudeDesktop = async () => {
+    const configDir = `${process.env.HOME || '~'}/Library/Application Support/Claude`;
+    const configPath = `${configDir}/claude_desktop_config.json`;
+
+    try {
+      await writeComponentFile(configPath, claudeDesktopConfig);
+      setInstalled(true);
+    } catch (err) {
+      alert(`Failed: ${err}. You may need to create the config manually.`);
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '8px 10px',
+    fontSize: 11,
+    fontFamily: 'var(--font-code)',
+    border: '1px solid var(--color-border)',
+    borderRadius: 6,
+    background: '#f5f5f7',
+    color: 'var(--color-fg)',
+    lineHeight: 1.5,
+    resize: 'none' as const,
+  };
+
+  const btnStyle: React.CSSProperties = {
+    height: 28,
+    padding: '0 12px',
+    background: '#ffffff',
+    color: 'var(--color-fg)',
+    border: '1px solid var(--color-border)',
+    borderRadius: 6,
+    fontSize: 12,
+    fontWeight: 500,
+    cursor: 'pointer',
+    boxShadow: 'var(--elevation-1)',
+  };
+
+  return (
+    <Card title="Claude Code (MCP)">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <div style={statusDot(mcpStatus)} />
+        <span style={{ fontSize: 13, color: 'var(--color-fg)' }}>
+          {mcpStatus === 'connected' ? 'Connected' : 'Not connected'}
+        </span>
+      </div>
+
+      {/* Auto-install */}
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-fg)', marginBottom: 8 }}>Quick Setup</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={handleInstallToClaudeCode}
+            style={{
+              ...btnStyle,
+              background: 'var(--color-primary)',
+              color: '#ffffff',
+              border: 'none',
+            }}
+          >
+            {installed ? 'Installed' : 'Install for Claude Code CLI'}
+          </button>
+        </div>
+        {installed && (
+          <div style={{ marginTop: 8, fontSize: 12, color: 'var(--color-success)' }}>
+            Wrote .mcp.json to project root. Claude Code will auto-discover Saddle's MCP server.
+          </div>
+        )}
+      </div>
+
+      {/* Manual config */}
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-fg)', marginBottom: 8 }}>Manual Setup</div>
+        <p style={{ fontSize: 12, color: 'var(--color-fg-muted)', lineHeight: 1.5, margin: '0 0 8px' }}>
+          Add to your Claude Code or Claude Desktop config:
+        </p>
+        <div style={{ position: 'relative' }}>
+          <textarea
+            readOnly
+            value={claudeCodeConfig}
+            rows={8}
+            style={inputStyle}
+          />
+          <button
+            onClick={() => handleCopy(claudeCodeConfig)}
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              ...btnStyle,
+              height: 24,
+              fontSize: 11,
+              padding: '0 8px',
+            }}
+          >
+            {copied ? 'Copied' : 'Copy'}
+          </button>
+        </div>
+      </div>
+
+      {/* Available tools */}
+      <div>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-fg)', marginBottom: 8 }}>Available MCP Tools</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {[
+            { name: 'saddle_list_components', desc: 'List all components with variants' },
+            { name: 'saddle_get_component', desc: 'Get full schema for a component' },
+            { name: 'saddle_update_tokens', desc: 'Update design tokens (saves to file)' },
+            { name: 'saddle_read_component', desc: 'Read component source code' },
+            { name: 'saddle_create_variant', desc: 'Create new variant with frontmatter' },
+            { name: 'saddle_get_global_tokens', desc: 'Read saddle.config.json tokens' },
+          ].map(tool => (
+            <div key={tool.name} style={{
+              display: 'flex', gap: 8, alignItems: 'baseline',
+              padding: '4px 0', fontSize: 12,
+            }}>
+              <span style={{ fontFamily: 'var(--font-code)', color: 'var(--color-primary)', fontWeight: 500, flexShrink: 0 }}>
+                {tool.name}
+              </span>
+              <span style={{ color: 'var(--color-fg-muted)' }}>{tool.desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
   );
 }
 
