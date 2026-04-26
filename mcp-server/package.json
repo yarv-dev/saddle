@@ -1,0 +1,12 @@
+{
+  "name": "@saddle/mcp-server",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.mjs",
+  "bin": {
+    "saddle-mcp": "./index.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.3.0"
+  }
+}

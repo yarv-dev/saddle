@@ -29,10 +29,28 @@
     <div class="hero-inner">
       <div class="hero-badge">Now in Beta</div>
       <h1>Build component libraries<br>that AI understands</h1>
-      <p class="hero-sub">Saddle is a desktop app for building production-ready React component libraries with token-first design, live editing, and bidirectional Claude Code integration.</p>
+      <p class="hero-sub">Token-first design, live editing, and bidirectional Claude Code integration.</p>
       <div class="hero-actions">
         <a href="#download" class="btn btn-primary">Download for Mac</a>
         <a href="https://github.com/yarv-dev/saddle" class="btn btn-secondary">View on GitHub</a>
+      </div>
+    </div>
+
+    <!-- Live Demo embedded in hero -->
+    <div class="hero-demo">
+      <div class="demo-app">
+        <div class="demo-sidebar" id="demo-sidebar"></div>
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+          <div class="demo-stage" id="demo-stage"></div>
+          <div class="demo-terminal">
+            <div class="demo-terminal-header">
+              <span>Terminal</span>
+              <span id="demo-terminal-count"></span>
+            </div>
+            <div class="demo-terminal-log" id="demo-terminal-log"></div>
+          </div>
+        </div>
+        <div class="demo-inspector" id="demo-inspector"></div>
       </div>
     </div>
   </section>
@@ -74,29 +92,6 @@
           <h3>npm Package Export</h3>
           <p>One-click export as publishable npm package with conditional exports for dev and production.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Live Demo -->
-  <section id="demo" class="live-demo">
-    <div class="section-inner">
-      <h2>Try it live</h2>
-      <p class="section-sub">Edit token values below and watch the component update in real time.</p>
-
-      <div class="demo-app">
-        <div class="demo-sidebar" id="demo-sidebar"></div>
-        <div style="flex:1;display:flex;flex-direction:column;min-width:0">
-          <div class="demo-stage" id="demo-stage"></div>
-          <div class="demo-terminal">
-            <div class="demo-terminal-header">
-              <span>Terminal</span>
-              <span id="demo-terminal-count"></span>
-            </div>
-            <div class="demo-terminal-log" id="demo-terminal-log"></div>
-          </div>
-        </div>
-        <div class="demo-inspector" id="demo-inspector"></div>
       </div>
     </div>
   </section>
