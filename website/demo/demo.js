@@ -39,7 +39,7 @@ function renderSidebar() {
     </div>
     <div class="demo-sidebar-section">
       <div class="demo-section-label">Components</div>
-      <button class="demo-nav-item active" onclick="selectVariant('Primary')">
+      <button class="demo-nav-item active" onclick="selectVariant('Primary', this)">
         <span>Button</span>
         <span class="demo-nav-sub">2 variants</span>
       </button>
@@ -56,8 +56,8 @@ function renderStage() {
   document.getElementById('demo-stage').innerHTML = `
     <div class="demo-variant-bar">
       <div class="demo-variant-tabs">
-        <button class="demo-variant-tab active" onclick="selectVariant('Primary')">Primary</button>
-        <button class="demo-variant-tab" onclick="selectVariant('Secondary')">Secondary</button>
+        <button class="demo-variant-tab active" onclick="selectVariant('Primary', this)">Primary</button>
+        <button class="demo-variant-tab" onclick="selectVariant('Secondary', this)">Secondary</button>
       </div>
       <button class="demo-new-variant">+ New Variant</button>
     </div>
@@ -190,7 +190,7 @@ function updatePreview() {
   });
 }
 
-function selectVariant(name) {
+function selectVariant(name, el) {
   if (name === 'Secondary') {
     activeTokens = {
       backgroundColor: '#f5f5f7',
@@ -206,7 +206,7 @@ function selectVariant(name) {
   }
 
   document.querySelectorAll('.demo-variant-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  if (el) el.classList.add('active');
 
   renderInspector();
   updatePreview();

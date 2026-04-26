@@ -5,6 +5,7 @@ import { StyleEditor } from '../components/StyleEditor';
 import { ComponentPreview } from '../components/ComponentPreview';
 import { AIGuidanceEditor } from '../components/AIGuidanceEditor';
 import { ResizablePanel } from '../components/ResizablePanel';
+import { ElementTree } from '../components/ElementTree';
 import { updateTokens, createVariant } from '../lib/tauri';
 
 interface EditorViewProps {
@@ -12,10 +13,11 @@ interface EditorViewProps {
   onBack: () => void;
 }
 
-type Tab = 'style' | 'code' | 'ai' | 'metadata';
+type Tab = 'style' | 'elements' | 'code' | 'ai' | 'metadata';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'style', label: 'Style' },
+  { id: 'elements', label: 'Elements' },
   { id: 'code', label: 'Code' },
   { id: 'ai', label: 'AI' },
   { id: 'metadata', label: 'Metadata' },
@@ -25,6 +27,7 @@ export function EditorView({ component }: EditorViewProps) {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [tab, setTab] = useState<Tab>('style');
   const [localTokens, setLocalTokens] = useState<Record<string, string>>({});
+  const [selectedElementPath, setSelectedElementPath] = useState<string | null>(null);
   const selectedVariant = component.variants[selectedVariantIndex];
 
   useEffect(() => {
@@ -166,6 +169,15 @@ export function EditorView({ component }: EditorViewProps) {
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {tab === 'style' && (
             <StyleEditor tokens={localTokens} code={selectedVariant.code} onTokenChange={handleTokenChange} />
+          )}
+
+          {tab === 'elements' && (
+            <ElementTree
+              code={selectedVariant.code}
+              tokens={localTokens}
+              onSelectElement={(styles, path) => setSelectedElementPath(path)}
+              selectedPath={selectedElementPath}
+            />
           )}
 
           {tab === 'code' && (
