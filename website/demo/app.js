@@ -255,12 +255,58 @@ window.setBp = function(w) {
   render();
 };
 
-const TOKEN_COLORS = ['#2563eb','#dc2626','#16a34a','#7c3aed','#ea580c','#0891b2','#1d1d1f','#f59e0b'];
+const DESIGN_TOKENS = {
+  colors: [
+    { name: 'primary', value: '#2563eb' },
+    { name: 'danger', value: '#dc2626' },
+    { name: 'success', value: '#16a34a' },
+    { name: 'violet', value: '#7c3aed' },
+    { name: 'warning', value: '#ea580c' },
+    { name: 'teal', value: '#0891b2' },
+    { name: 'brand', value: '#1d1d1f' },
+    { name: 'amber', value: '#f59e0b' },
+    { name: 'surface', value: '#f5f5f7' },
+    { name: 'white', value: '#ffffff' },
+  ],
+};
+
 window.cycleToken = function(key) {
-  const cur = state.tokens[key];
-  const idx = TOKEN_COLORS.indexOf(cur);
-  state.tokens[key] = TOKEN_COLORS[(idx + 1) % TOKEN_COLORS.length];
-  addLog('ok', `Token picked: ${key} = ${state.tokens[key]}`);
+  // Show dropdown
+  const existing = document.getElementById('sd-token-dropdown');
+  if (existing) existing.remove();
+
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const dropdown = document.createElement('div');
+  dropdown.id = 'sd-token-dropdown';
+  dropdown.className = 'sd-dropdown';
+  dropdown.style.top = (rect.bottom + 4) + 'px';
+  dropdown.style.left = Math.min(rect.left, window.innerWidth - 180) + 'px';
+
+  dropdown.innerHTML = `
+    <div class="sd-dd-label">Color tokens</div>
+    ${DESIGN_TOKENS.colors.map(t => `
+      <button class="sd-dd-item" onclick="pickToken('${key}','${t.value}')">
+        <span class="sd-dd-swatch" style="background:${t.value}"></span>
+        <span class="sd-dd-name">${t.name}</span>
+        <span class="sd-dd-val">${t.value}</span>
+      </button>
+    `).join('')}
+  `;
+
+  document.body.appendChild(dropdown);
+  setTimeout(() => {
+    document.addEventListener('click', function close(e) {
+      if (!dropdown.contains(e.target)) { dropdown.remove(); document.removeEventListener('click', close); }
+    });
+  }, 0);
+};
+
+window.pickToken = function(key, value) {
+  state.tokens[key] = value;
+  addLog('ok', `Token picked: ${key} = ${value}`);
+  const dd = document.getElementById('sd-token-dropdown');
+  if (dd) dd.remove();
   render();
 };
 

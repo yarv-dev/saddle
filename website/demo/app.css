@@ -102,6 +102,29 @@
 .sd ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
 .sd ::-webkit-scrollbar-track { background: transparent; }
 
+/* Token dropdown */
+.sd-dropdown {
+  position: fixed; z-index: 1000;
+  background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 4px; min-width: 170px;
+}
+.sd-dd-label {
+  font-size: 9px; color: #a3a3a3; text-transform: uppercase;
+  letter-spacing: 0.06em; font-weight: 600; padding: 4px 8px;
+}
+.sd-dd-item {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 5px 8px; background: none; border: none; border-radius: 4px;
+  cursor: pointer; font-size: 11px; text-align: left; font-family: inherit;
+}
+.sd-dd-item:hover { background: #f5f5f7; }
+.sd-dd-swatch {
+  width: 14px; height: 14px; border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
+}
+.sd-dd-name { font-family: 'SF Mono', ui-monospace, monospace; flex: 1; color: #1d1d1f; }
+.sd-dd-val { font-family: 'SF Mono', ui-monospace, monospace; font-size: 10px; color: #a3a3a3; }
+
 @media (max-width: 900px) {
   .sd { height: auto; flex-direction: column; }
   .sd-sidebar, .sd-elements, .sd-inspector { width: 100%; }
