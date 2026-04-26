@@ -18,6 +18,7 @@ interface SidebarProps {
 
 export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadProject, onConfigure: _onConfigure, onExport, view, onViewChange }: SidebarProps) {
   const [search, setSearch] = useState('');
+  const [collapsed, setCollapsed] = useState(false);
 
   const filteredComponents = project?.components.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase())
@@ -25,33 +26,50 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
 
   return (
     <aside style={{
-      width: 260,
+      width: collapsed ? 48 : 260,
       flexShrink: 0,
       height: '100%',
       background: '#f5f5f7',
       borderRight: '1px solid var(--color-border)',
       display: 'flex',
       flexDirection: 'column',
+      transition: 'width 150ms ease',
+      overflow: 'hidden',
     }}>
-      <header style={{ padding: '16px', flexShrink: 0, borderBottom: '1px solid var(--color-border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img
-            src={saddleLogo}
-            alt="Saddle"
-            style={{
-              height: 24,
-              objectFit: 'contain',
-            }}
-          />
-          {project && (
-            <div style={{ fontSize: 11, color: 'var(--color-fg-muted)' }}>
-              {project.rootPath.split('/').pop()}
+      <header style={{ padding: collapsed ? '12px 0' : '16px', flexShrink: 0, borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between' }}>
+        {collapsed ? (
+          <button
+            onClick={() => setCollapsed(false)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            title="Expand sidebar"
+          >
+            <img src={saddleLogo} alt="Saddle" style={{ height: 22, objectFit: 'contain' }} />
+          </button>
+        ) : (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src={saddleLogo} alt="Saddle" style={{ height: 24, objectFit: 'contain' }} />
+              {project && (
+                <div style={{ fontSize: 11, color: 'var(--color-fg-muted)' }}>
+                  {project.rootPath.split('/').pop()}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+            <button
+              onClick={() => setCollapsed(true)}
+              title="Collapse sidebar"
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: 'var(--color-fg-subtle)', fontSize: 14, padding: '0 2px',
+              }}
+            >
+              ◀
+            </button>
+          </>
+        )}
       </header>
 
-      <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <nav style={{ flex: 1, overflowY: 'auto', padding: collapsed ? '8px 4px' : '8px 12px', display: collapsed ? 'none' : 'flex', flexDirection: 'column', gap: 16 }}>
         {!project ? (
           <div style={{ padding: '24px 4px', textAlign: 'center' }}>
             <div style={{ fontSize: 13, color: 'var(--color-fg-muted)', lineHeight: 1.5 }}>
@@ -106,7 +124,7 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
         )}
       </nav>
 
-      <footer style={{ padding: '12px', borderTop: '1px solid var(--color-border)', flexShrink: 0 }}>
+      <footer style={{ padding: '12px', borderTop: '1px solid var(--color-border)', flexShrink: 0, display: collapsed ? 'none' : 'block' }}>
         <button
           onClick={onLoadProject}
           style={{

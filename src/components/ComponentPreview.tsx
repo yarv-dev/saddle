@@ -404,7 +404,8 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
   const tokens = liveTokens || frontmatter?.tokens || {};
   const [mode, setMode] = useState<'isolated' | 'devserver'>(devServerUrl ? 'devserver' : 'isolated');
 
-  const renderedHtml = useMemo(() => jsxToHtml(code, tokens), [code, tokens]);
+  const tokensKey = JSON.stringify(tokens);
+  const renderedHtml = useMemo(() => jsxToHtml(code, tokens), [code, tokensKey]);
 
   const isolatedSrcdoc = useMemo(() => `<!DOCTYPE html>
 <html>
