@@ -30,10 +30,7 @@ function parseJSXToTree(code: string, tokens: Record<string, string>): ElementNo
 }
 
 function parseJSXBlock(jsx: string, nodes: ElementNode[], tokens: Record<string, string>) {
-  // Match opening tags with their attributes
-  const tagRegex = /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g;
   const selfClosingRegex = /<(\w+)([^>]*)\/>/g;
-
   let match;
 
   // Self-closing tags
@@ -45,8 +42,8 @@ function parseJSXBlock(jsx: string, nodes: ElementNode[], tokens: Record<string,
   }
 
   // Tags with children
-  const tagRegex2 = /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g;
-  while ((match = tagRegex2.exec(jsx)) !== null) {
+  const tagRegex = /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g;
+  while ((match = tagRegex.exec(jsx)) !== null) {
     const [, tag, attrs, inner] = match;
     const styles = extractInlineStyles(attrs, tokens);
     const className = extractClassName(attrs);

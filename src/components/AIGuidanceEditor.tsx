@@ -6,7 +6,7 @@ interface AIGuidanceEditorProps {
 }
 
 export function AIGuidanceEditor({ frontmatter, onUpdate }: AIGuidanceEditorProps) {
-  const [editing, setEditing] = useState<string | null>(null);
+  const [, setFocused] = useState<string | null>(null);
 
   const fields = [
     { key: 'name', label: 'Name', placeholder: 'Component name' },
@@ -23,8 +23,6 @@ export function AIGuidanceEditor({ frontmatter, onUpdate }: AIGuidanceEditorProp
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {fields.map((field) => {
           const value = frontmatter?.[field.key] || '';
-          const isEditing = editing === field.key;
-
           return (
             <div key={field.key}>
               <div style={{ fontSize: 10, color: 'var(--color-fg-muted)', marginBottom: 6, fontWeight: 600 }}>
@@ -48,8 +46,8 @@ export function AIGuidanceEditor({ frontmatter, onUpdate }: AIGuidanceEditorProp
                     resize: 'vertical',
                     lineHeight: 1.5,
                   }}
-                  onFocus={() => setEditing(field.key)}
-                  onBlur={() => setEditing(null)}
+                  onFocus={() => setFocused(field.key)}
+                  onBlur={() => setFocused(null)}
                 />
               ) : (
                 <input
@@ -67,8 +65,8 @@ export function AIGuidanceEditor({ frontmatter, onUpdate }: AIGuidanceEditorProp
                     background: '#ffffff',
                     color: 'var(--color-fg)',
                   }}
-                  onFocus={() => setEditing(field.key)}
-                  onBlur={() => setEditing(null)}
+                  onFocus={() => setFocused(field.key)}
+                  onBlur={() => setFocused(null)}
                 />
               )}
             </div>

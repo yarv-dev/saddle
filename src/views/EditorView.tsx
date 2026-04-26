@@ -7,7 +7,7 @@ import { AIGuidanceEditor } from '../components/AIGuidanceEditor';
 import { ResizablePanel } from '../components/ResizablePanel';
 import { ElementTree } from '../components/ElementTree';
 import { updateTokens, createVariant } from '../lib/tauri';
-import { ChevronRight, ChevronLeft, Plus } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface EditorViewProps {
   component: Component;

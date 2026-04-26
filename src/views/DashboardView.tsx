@@ -180,19 +180,9 @@ function MCPSetupCard({ projectRoot, mcpStatus, statusDot }: {
   const [installed, setInstalled] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const bridgePath = `${projectRoot}/node_modules/.bin/saddle-mcp`;
   const mcpBridgeSrc = `${projectRoot}/mcp-bridge.mjs`;
 
   const claudeCodeConfig = JSON.stringify({
-    mcpServers: {
-      saddle: {
-        command: 'node',
-        args: [mcpBridgeSrc],
-      },
-    },
-  }, null, 2);
-
-  const claudeDesktopConfig = JSON.stringify({
     mcpServers: {
       saddle: {
         command: 'node',
@@ -229,17 +219,6 @@ function MCPSetupCard({ projectRoot, mcpStatus, statusDot }: {
     }
   };
 
-  const handleInstallToClaudeDesktop = async () => {
-    const configDir = `${process.env.HOME || '~'}/Library/Application Support/Claude`;
-    const configPath = `${configDir}/claude_desktop_config.json`;
-
-    try {
-      await writeComponentFile(configPath, claudeDesktopConfig);
-      setInstalled(true);
-    } catch (err) {
-      alert(`Failed: ${err}. You may need to create the config manually.`);
-    }
-  };
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
