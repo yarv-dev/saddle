@@ -9,49 +9,131 @@ interface StyleEditorProps {
   onTokenChange: (key: string, value: string) => void;
 }
 
-// All CSS properties a component could use, organized like Figma
+// Complete CSS property catalog
 const ALL_PROPERTIES: { section: string; props: string[] }[] = [
   {
     section: 'Layout',
-    props: ['display', 'position', 'top', 'right', 'bottom', 'left', 'zIndex', 'overflow', 'float', 'clear',
-            'flexDirection', 'flexWrap', 'justifyContent', 'alignItems', 'alignContent', 'alignSelf',
-            'flex', 'flexGrow', 'flexShrink', 'flexBasis', 'order',
-            'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow', 'gridGap'],
+    props: [
+      'display', 'position', 'top', 'right', 'bottom', 'left', 'inset',
+      'zIndex', 'overflow', 'overflowX', 'overflowY', 'float', 'clear',
+      'visibility', 'boxSizing', 'objectFit', 'objectPosition',
+      // Flexbox
+      'flexDirection', 'flexWrap', 'flexFlow', 'justifyContent', 'alignItems',
+      'alignContent', 'alignSelf', 'flex', 'flexGrow', 'flexShrink', 'flexBasis', 'order',
+      // Grid
+      'gridTemplateColumns', 'gridTemplateRows', 'gridTemplateAreas',
+      'gridAutoColumns', 'gridAutoRows', 'gridAutoFlow',
+      'gridColumn', 'gridColumnStart', 'gridColumnEnd',
+      'gridRow', 'gridRowStart', 'gridRowEnd',
+      'gridArea', 'gridGap', 'justifyItems', 'justifySelf', 'placeContent', 'placeItems', 'placeSelf',
+      // Container
+      'containerType', 'containerName',
+    ],
   },
   {
     section: 'Size',
-    props: ['width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'aspectRatio'],
+    props: [
+      'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight',
+      'aspectRatio', 'boxDecorationBreak',
+    ],
   },
   {
     section: 'Spacing',
-    props: ['padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-            'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'gap', 'rowGap', 'columnGap'],
+    props: [
+      'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+      'paddingInline', 'paddingInlineStart', 'paddingInlineEnd',
+      'paddingBlock', 'paddingBlockStart', 'paddingBlockEnd',
+      'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+      'marginInline', 'marginInlineStart', 'marginInlineEnd',
+      'marginBlock', 'marginBlockStart', 'marginBlockEnd',
+      'gap', 'rowGap', 'columnGap',
+    ],
   },
   {
     section: 'Fill',
-    props: ['backgroundColor', 'background', 'backgroundImage', 'backgroundSize', 'backgroundPosition',
-            'backgroundRepeat', 'backgroundClip', 'opacity'],
+    props: [
+      'backgroundColor', 'background', 'backgroundImage', 'backgroundSize',
+      'backgroundPosition', 'backgroundRepeat', 'backgroundClip',
+      'backgroundOrigin', 'backgroundAttachment', 'backgroundBlendMode',
+      'opacity', 'isolation',
+      // Gradient
+      'backgroundGradient',
+    ],
   },
   {
     section: 'Stroke',
-    props: ['border', 'borderWidth', 'borderStyle', 'borderColor',
-            'borderTop', 'borderRight', 'borderBottom', 'borderLeft',
-            'borderRadius', 'borderTopLeftRadius', 'borderTopRightRadius',
-            'borderBottomRightRadius', 'borderBottomLeftRadius',
-            'outline', 'outlineWidth', 'outlineStyle', 'outlineColor', 'outlineOffset'],
+    props: [
+      'border', 'borderWidth', 'borderStyle', 'borderColor',
+      'borderTop', 'borderTopWidth', 'borderTopStyle', 'borderTopColor',
+      'borderRight', 'borderRightWidth', 'borderRightStyle', 'borderRightColor',
+      'borderBottom', 'borderBottomWidth', 'borderBottomStyle', 'borderBottomColor',
+      'borderLeft', 'borderLeftWidth', 'borderLeftStyle', 'borderLeftColor',
+      'borderRadius', 'borderTopLeftRadius', 'borderTopRightRadius',
+      'borderBottomRightRadius', 'borderBottomLeftRadius',
+      'borderImage', 'borderImageSource', 'borderImageSlice', 'borderImageWidth',
+      'borderCollapse', 'borderSpacing',
+      'outline', 'outlineWidth', 'outlineStyle', 'outlineColor', 'outlineOffset',
+      'boxShadow',
+    ],
   },
   {
     section: 'Typography',
-    props: ['color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
-            'lineHeight', 'letterSpacing', 'textAlign', 'textDecoration', 'textTransform',
-            'whiteSpace', 'wordBreak', 'wordSpacing', 'textOverflow', 'textShadow',
-            'textIndent', 'verticalAlign'],
+    props: [
+      'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontVariant',
+      'fontStretch', 'fontFeatureSettings', 'fontVariationSettings',
+      'lineHeight', 'letterSpacing', 'wordSpacing',
+      'textAlign', 'textAlignLast', 'textDecoration', 'textDecorationColor',
+      'textDecorationLine', 'textDecorationStyle', 'textDecorationThickness',
+      'textTransform', 'textIndent', 'textOverflow', 'textShadow',
+      'textUnderlineOffset', 'textUnderlinePosition',
+      'whiteSpace', 'wordBreak', 'wordWrap', 'overflowWrap', 'hyphens',
+      'verticalAlign', 'direction', 'unicodeBidi', 'writingMode',
+      'lineClamp', 'WebkitLineClamp',
+      // List
+      'listStyle', 'listStyleType', 'listStylePosition', 'listStyleImage',
+    ],
   },
   {
     section: 'Effects',
-    props: ['boxShadow', 'filter', 'backdropFilter', 'mixBlendMode',
-            'transform', 'transformOrigin', 'transition', 'animation',
-            'cursor', 'pointerEvents', 'userSelect', 'willChange'],
+    props: [
+      'filter', 'backdropFilter', 'mixBlendMode',
+      'transform', 'transformOrigin', 'transformStyle', 'perspective', 'perspectiveOrigin',
+      'transition', 'transitionProperty', 'transitionDuration', 'transitionTimingFunction', 'transitionDelay',
+      'animation', 'animationName', 'animationDuration', 'animationTimingFunction',
+      'animationDelay', 'animationIterationCount', 'animationDirection',
+      'animationFillMode', 'animationPlayState',
+      'clipPath', 'mask', 'maskImage',
+    ],
+  },
+  {
+    section: 'Interaction',
+    props: [
+      'cursor', 'pointerEvents', 'userSelect', 'touchAction',
+      'resize', 'scrollBehavior', 'scrollSnapType', 'scrollSnapAlign',
+      'scrollMargin', 'scrollPadding',
+      'willChange', 'contain', 'contentVisibility',
+      'caretColor', 'accentColor', 'colorScheme', 'appearance',
+    ],
+  },
+  {
+    section: 'Table',
+    props: [
+      'tableLayout', 'captionSide', 'emptyCells',
+    ],
+  },
+  {
+    section: 'SVG',
+    props: [
+      'fill', 'fillOpacity', 'fillRule',
+      'stroke', 'strokeWidth', 'strokeLinecap', 'strokeLinejoin',
+      'strokeDasharray', 'strokeDashoffset', 'strokeOpacity',
+    ],
+  },
+  {
+    section: 'Breakpoints',
+    props: [
+      'breakpointSm', 'breakpointMd', 'breakpointLg', 'breakpointXl', 'breakpoint2xl',
+    ],
   },
 ];
 

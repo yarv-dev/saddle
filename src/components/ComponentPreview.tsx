@@ -1,4 +1,12 @@
 import { useState, useMemo } from 'react';
+import { Smartphone, Tablet, Monitor, MonitorSmartphone } from 'lucide-react';
+
+const BREAKPOINTS = [
+  { name: 'Mobile', width: 375, icon: Smartphone },
+  { name: 'Tablet', width: 768, icon: Tablet },
+  { name: 'Desktop', width: 1280, icon: Monitor },
+  { name: 'Full', width: 0, icon: MonitorSmartphone },
+] as const;
 
 interface ComponentPreviewProps {
   code: string;
@@ -403,6 +411,7 @@ function resolveConditionalExpressions(html: string): string {
 export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }: ComponentPreviewProps) {
   const tokens = liveTokens || frontmatter?.tokens || {};
   const [mode, setMode] = useState<'isolated' | 'devserver'>(devServerUrl ? 'devserver' : 'isolated');
+  const [breakpoint, setBreakpoint] = useState<number>(0);
 
   const tokensKey = JSON.stringify(tokens);
   const renderedHtml = useMemo(() => jsxToHtml(code, tokens), [code, tokensKey]);
@@ -435,6 +444,49 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      {/* Toolbar: Breakpoints + Mode */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '6px 0', flexShrink: 0, gap: 8,
+      }}>
+        {/* Breakpoint switcher */}
+        <div style={{ display: 'flex', gap: 2, background: 'rgba(0,0,0,0.03)', borderRadius: 6, padding: 2 }}>
+          {BREAKPOINTS.map(bp => {
+            const Icon = bp.icon;
+            const isActive = breakpoint === bp.width;
+            return (
+              <button
+                key={bp.name}
+                onClick={() => setBreakpoint(bp.width)}
+                title={bp.width ? `${bp.name} (${bp.width}px)` : 'Full width'}
+                style={{
+                  height: 26, padding: '0 8px',
+                  background: isActive ? '#fff' : 'transparent',
+                  border: 'none',
+                  borderRadius: 4,
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  fontSize: 11, fontWeight: isActive ? 600 : 400,
+                  color: isActive ? 'var(--color-fg)' : 'var(--color-fg-muted)',
+                  boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  transition: 'all 100ms',
+                }}
+              >
+                <Icon size={12} />
+                {isActive && <span>{bp.width ? `${bp.width}px` : 'Full'}</span>}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Breakpoint size indicator */}
+        {breakpoint > 0 && (
+          <span style={{ fontSize: 11, color: 'var(--color-fg-muted)', fontFamily: 'var(--font-code)' }}>
+            {breakpoint}px
+          </span>
+        )}
+      </div>
+
       {/* Mode Toggle */}
       {devServerUrl && (
         <div style={{
@@ -472,29 +524,42 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
         </div>
       )}
 
-      {/* Preview */}
-      {mode === 'devserver' && devServerUrl ? (
-        <iframe
-          src={devServerUrl}
-          style={{
-            flex: 1, width: '100%',
-            border: '1px solid var(--color-border)',
-            borderRadius: 10, background: '#ffffff',
-          }}
-          title="Dev Server Preview"
-        />
-      ) : (
-        <iframe
-          srcDoc={isolatedSrcdoc}
-          style={{
-            flex: 1, width: '100%',
-            border: '1px solid var(--color-border)',
-            borderRadius: 10, background: '#ffffff',
-          }}
-          sandbox="allow-scripts"
-          title="Component Preview"
-        />
-      )}
+      {/* Preview with breakpoint constraint */}
+      <div style={{
+        flex: 1, display: 'flex', justifyContent: 'center', minHeight: 0,
+        background: breakpoint > 0 ? 'var(--color-stage)' : 'transparent',
+        padding: breakpoint > 0 ? 8 : 0,
+        transition: 'all 150ms',
+      }}>
+        {mode === 'devserver' && devServerUrl ? (
+          <iframe
+            src={devServerUrl}
+            style={{
+              width: breakpoint > 0 ? breakpoint : '100%',
+              maxWidth: '100%',
+              height: '100%',
+              border: '1px solid var(--color-border)',
+              borderRadius: 10, background: '#ffffff',
+              transition: 'width 200ms ease',
+            }}
+            title="Dev Server Preview"
+          />
+        ) : (
+          <iframe
+            srcDoc={isolatedSrcdoc}
+            style={{
+              width: breakpoint > 0 ? breakpoint : '100%',
+              maxWidth: '100%',
+              height: '100%',
+              border: '1px solid var(--color-border)',
+              borderRadius: 10, background: '#ffffff',
+              transition: 'width 200ms ease',
+            }}
+            sandbox="allow-scripts"
+            title="Component Preview"
+          />
+        )}
+      </div>
     </div>
   );
 }
