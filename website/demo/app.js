@@ -235,13 +235,28 @@ window.updateToken = function(key, value) {
   state.tokens[key] = value;
   addLog('ok', `Token saved: ${key} → Button.${DEMO_COMPONENT.variants[state.selectedVariant].name}.tsx`);
   render();
+  syncAppPreview();
 };
+
+function syncAppPreview() {
+  const btn = document.getElementById('asp-btn');
+  if (!btn) return;
+  const t = state.tokens;
+  btn.style.backgroundColor = t.backgroundColor || '';
+  btn.style.color = t.color || '';
+  btn.style.padding = t.padding || '';
+  btn.style.borderRadius = t.borderRadius || '';
+  btn.style.fontSize = t.fontSize || '';
+  btn.style.fontWeight = t.fontWeight || '';
+  btn.style.border = t.border || 'none';
+}
 
 window.selectVariant = function(idx) {
   state.selectedVariant = idx;
   state.tokens = { ...DEMO_COMPONENT.variants[idx].tokens };
   addLog('info', `Switched to ${DEMO_COMPONENT.variants[idx].name}`);
   render();
+  syncAppPreview();
 };
 
 window.toggleSection = function(name) {
@@ -308,6 +323,7 @@ window.pickToken = function(key, value) {
   const dd = document.getElementById('sd-token-dropdown');
   if (dd) dd.remove();
   render();
+  syncAppPreview();
 };
 
 window.addProp = function(sectionName) {

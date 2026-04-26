@@ -128,6 +128,63 @@ h2 {
 .hfe-step span { font-size: 12px; color: var(--fg-secondary); }
 .hfe-arrow { font-size: 18px; color: var(--fg-tertiary); flex-shrink: 0; }
 
+/* Mini app screen preview */
+.app-screen-preview {
+  max-width: 640px; margin: 0 auto 80px; text-align: center;
+}
+.asp-label {
+  font-size: 13px; color: var(--fg-tertiary); font-weight: 500;
+  margin-bottom: 12px;
+}
+.asp-browser {
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.asp-chrome {
+  height: 32px; background: #f5f5f5; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px;
+}
+.asp-dots { display: flex; gap: 5px; }
+.asp-dots span { width: 9px; height: 9px; border-radius: 50%; }
+.asp-dots span:nth-child(1) { background: #ff5f57; }
+.asp-dots span:nth-child(2) { background: #febc2e; }
+.asp-dots span:nth-child(3) { background: #28c840; }
+.asp-url {
+  flex: 1; text-align: center; font-size: 11px; color: #888;
+  background: #fff; border-radius: 4px; padding: 3px 10px;
+  border: 1px solid var(--border);
+}
+.asp-page { padding: 0; background: #fff; }
+.asp-page-nav {
+  padding: 10px 24px; display: flex; justify-content: space-between;
+  align-items: center; border-bottom: 1px solid var(--border-light);
+}
+.asp-logo { font-size: 14px; font-weight: 700; color: var(--fg); }
+.asp-links { display: flex; gap: 16px; font-size: 12px; color: var(--fg-tertiary); }
+.asp-page-hero {
+  padding: 40px 24px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.asp-h { font-size: 22px; font-weight: 700; color: var(--fg); letter-spacing: -0.02em; }
+.asp-p { font-size: 13px; color: var(--fg-tertiary); margin-bottom: 8px; }
+.asp-ctas { display: flex; gap: 8px; }
+.asp-btn-primary {
+  padding: 10px 20px; border-radius: 8px; border: none;
+  font-size: 14px; font-weight: 600; color: #fff;
+  background: #2563eb; font-family: inherit; cursor: default;
+  transition: all 0.2s ease;
+}
+.asp-btn-secondary {
+  padding: 10px 20px; border-radius: 8px;
+  border: 1px solid var(--border); background: #fff;
+  font-size: 14px; font-weight: 500; color: var(--fg-secondary);
+  font-family: inherit; cursor: default;
+}
+.asp-hint {
+  margin-top: 12px; font-size: 12px; color: var(--fg-tertiary);
+  font-style: italic;
+}
+
 /* === FEATURES === */
 .features { padding: 100px 0; background: var(--bg); border-top: 1px solid var(--border-light); }
 .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
