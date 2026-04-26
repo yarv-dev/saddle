@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ProjectStructure, Component } from '../types/component';
 import { SearchBar } from './SearchBar';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeftClose, PanelLeft } from 'lucide-react';
 import saddleLogo from '/saddle-logo.png?url';
 
 export type AppView = 'components' | 'hierarchy' | 'dashboard' | 'export';
@@ -37,21 +37,35 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
       transition: 'width 150ms ease',
       overflow: 'hidden',
     }}>
-      <header style={{ padding: collapsed ? '12px 0' : '16px', flexShrink: 0, borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between' }}>
+      <header style={{
+        padding: collapsed ? '14px 0' : '14px 16px',
+        flexShrink: 0,
+        borderBottom: '1px solid var(--color-border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: collapsed ? 'center' : 'space-between',
+        minHeight: 52,
+      }}>
         {collapsed ? (
           <button
             onClick={() => setCollapsed(false)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
             title="Expand sidebar"
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: 6, borderRadius: 6, color: 'var(--color-fg-muted)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
           >
-            <img src={saddleLogo} alt="Saddle" style={{ height: 22, objectFit: 'contain' }} />
+            <PanelLeft size={18} />
           </button>
         ) : (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src={saddleLogo} alt="Saddle" style={{ height: 24, objectFit: 'contain' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, overflow: 'hidden' }}>
+              <img src={saddleLogo} alt="Saddle" style={{ height: 22, objectFit: 'contain', flexShrink: 0 }} />
               {project && (
-                <div style={{ fontSize: 11, color: 'var(--color-fg-muted)' }}>
+                <div style={{ fontSize: 11, color: 'var(--color-fg-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {project.rootPath.split('/').pop()}
                 </div>
               )}
@@ -61,10 +75,13 @@ export function Sidebar({ project, onSelectComponent, selectedComponent, onLoadP
               title="Collapse sidebar"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--color-fg-subtle)', fontSize: 14, padding: '0 2px',
+                color: 'var(--color-fg-subtle)', padding: 4, borderRadius: 4,
+                display: 'flex', alignItems: 'center', flexShrink: 0,
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-fg-subtle)'; }}
             >
-              <PanelLeftClose size={14} />
+              <PanelLeftClose size={16} />
             </button>
           </>
         )}

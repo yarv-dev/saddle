@@ -1,17 +1,35 @@
 import { useState, useMemo } from 'react';
 import { Smartphone, Tablet, Monitor, MonitorSmartphone } from 'lucide-react';
 
-const BREAKPOINTS = [
-  { name: 'Mobile', width: 375, icon: Smartphone },
-  { name: 'Tablet', width: 768, icon: Tablet },
-  { name: 'Desktop', width: 1280, icon: Monitor },
-  { name: 'Full', width: 0, icon: MonitorSmartphone },
-] as const;
+export type Breakpoint = { name: string; width: number };
+
+const DEFAULT_BREAKPOINTS: Breakpoint[] = [
+  { name: 'Mobile', width: 375 },
+  { name: 'Tablet', width: 768 },
+  { name: 'Desktop', width: 1280 },
+  { name: 'Full', width: 0 },
+];
+
+const BREAKPOINT_ICONS: Record<string, any> = {
+  Mobile: Smartphone,
+  Tablet: Tablet,
+  Desktop: Monitor,
+  Full: MonitorSmartphone,
+};
+
+function iconForBreakpoint(name: string, width: number) {
+  if (BREAKPOINT_ICONS[name]) return BREAKPOINT_ICONS[name];
+  if (width <= 480) return Smartphone;
+  if (width <= 1024) return Tablet;
+  if (width === 0) return MonitorSmartphone;
+  return Monitor;
+}
 
 interface ComponentPreviewProps {
   code: string;
   frontmatter?: any;
   liveTokens?: Record<string, string>;
+  breakpoints?: Breakpoint[];
   devServerUrl?: string;
 }
 
@@ -408,10 +426,16 @@ function resolveConditionalExpressions(html: string): string {
   return result;
 }
 
-export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }: ComponentPreviewProps) {
+export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl, breakpoints }: ComponentPreviewProps) {
   const tokens = liveTokens || frontmatter?.tokens || {};
   const [mode, setMode] = useState<'isolated' | 'devserver'>(devServerUrl ? 'devserver' : 'isolated');
   const [breakpoint, setBreakpoint] = useState<number>(0);
+  const [editingBreakpoints, setEditingBreakpoints] = useState(false);
+  const [customBreakpoints, setCustomBreakpoints] = useState<Breakpoint[]>(breakpoints || DEFAULT_BREAKPOINTS);
+  const [newBpName, setNewBpName] = useState('');
+  const [newBpWidth, setNewBpWidth] = useState('');
+
+  const activeBreakpoints = customBreakpoints;
 
   const tokensKey = JSON.stringify(tokens);
   const renderedHtml = useMemo(() => jsxToHtml(code, tokens), [code, tokensKey]);
@@ -451,8 +475,8 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
       }}>
         {/* Breakpoint switcher */}
         <div style={{ display: 'flex', gap: 2, background: 'rgba(0,0,0,0.03)', borderRadius: 6, padding: 2 }}>
-          {BREAKPOINTS.map(bp => {
-            const Icon = bp.icon;
+          {activeBreakpoints.map(bp => {
+            const Icon = iconForBreakpoint(bp.name, bp.width);
             const isActive = breakpoint === bp.width;
             return (
               <button
@@ -462,9 +486,7 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
                 style={{
                   height: 26, padding: '0 8px',
                   background: isActive ? '#fff' : 'transparent',
-                  border: 'none',
-                  borderRadius: 4,
-                  cursor: 'pointer',
+                  border: 'none', borderRadius: 4, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: 4,
                   fontSize: 11, fontWeight: isActive ? 600 : 400,
                   color: isActive ? 'var(--color-fg)' : 'var(--color-fg-muted)',
@@ -477,15 +499,134 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl }
               </button>
             );
           })}
+          {/* Edit breakpoints toggle */}
+          <button
+            onClick={() => setEditingBreakpoints(!editingBreakpoints)}
+            title="Configure breakpoints"
+            style={{
+              height: 26, width: 26,
+              background: editingBreakpoints ? 'var(--color-primary)' : 'transparent',
+              color: editingBreakpoints ? '#fff' : 'var(--color-fg-subtle)',
+              border: 'none', borderRadius: 4, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 13,
+            }}
+          >
+            +
+          </button>
         </div>
 
-        {/* Breakpoint size indicator */}
         {breakpoint > 0 && (
           <span style={{ fontSize: 11, color: 'var(--color-fg-muted)', fontFamily: 'var(--font-code)' }}>
             {breakpoint}px
           </span>
         )}
       </div>
+
+      {/* Breakpoint Configuration Panel */}
+      {editingBreakpoints && (
+        <div style={{
+          padding: '10px 12px', borderRadius: 8, border: '1px solid var(--color-border)',
+          background: '#fff', marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 8,
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-fg)' }}>Breakpoints</div>
+          {customBreakpoints.filter(bp => bp.width > 0).map((bp, idx) => (
+            <div key={bp.name} style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <input
+                value={bp.name}
+                onChange={(e) => {
+                  const next = [...customBreakpoints];
+                  next[idx] = { ...next[idx], name: e.target.value };
+                  setCustomBreakpoints(next);
+                }}
+                style={{
+                  flex: 1, height: 26, padding: '0 8px', fontSize: 11,
+                  border: '1px solid var(--color-border)', borderRadius: 4,
+                  background: '#fff', color: 'var(--color-fg)',
+                }}
+              />
+              <input
+                type="number"
+                value={bp.width}
+                onChange={(e) => {
+                  const next = [...customBreakpoints];
+                  next[idx] = { ...next[idx], width: parseInt(e.target.value) || 0 };
+                  setCustomBreakpoints(next);
+                }}
+                style={{
+                  width: 72, height: 26, padding: '0 8px', fontSize: 11,
+                  fontFamily: 'var(--font-code)',
+                  border: '1px solid var(--color-border)', borderRadius: 4,
+                  background: '#fff', color: 'var(--color-fg)',
+                  textAlign: 'right',
+                }}
+              />
+              <span style={{ fontSize: 10, color: 'var(--color-fg-subtle)' }}>px</span>
+              <button
+                onClick={() => setCustomBreakpoints(customBreakpoints.filter((_, i) => i !== idx))}
+                style={{
+                  width: 22, height: 22, background: 'none', border: 'none',
+                  color: 'var(--color-fg-subtle)', cursor: 'pointer', fontSize: 14,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: 4,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-danger)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-fg-subtle)'; }}
+              >
+                x
+              </button>
+            </div>
+          ))}
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <input
+              value={newBpName}
+              onChange={(e) => setNewBpName(e.target.value)}
+              placeholder="Name"
+              style={{
+                flex: 1, height: 26, padding: '0 8px', fontSize: 11,
+                border: '1px solid var(--color-border)', borderRadius: 4,
+                background: '#fafafa', color: 'var(--color-fg)',
+              }}
+            />
+            <input
+              type="number"
+              value={newBpWidth}
+              onChange={(e) => setNewBpWidth(e.target.value)}
+              placeholder="px"
+              style={{
+                width: 72, height: 26, padding: '0 8px', fontSize: 11,
+                fontFamily: 'var(--font-code)',
+                border: '1px solid var(--color-border)', borderRadius: 4,
+                background: '#fafafa', color: 'var(--color-fg)',
+                textAlign: 'right',
+              }}
+            />
+            <button
+              onClick={() => {
+                if (newBpName && newBpWidth) {
+                  const fullIdx = customBreakpoints.findIndex(bp => bp.width === 0);
+                  const insert = { name: newBpName, width: parseInt(newBpWidth) };
+                  const next = [...customBreakpoints];
+                  if (fullIdx >= 0) next.splice(fullIdx, 0, insert);
+                  else next.push(insert);
+                  next.sort((a, b) => (a.width || 99999) - (b.width || 99999));
+                  setCustomBreakpoints(next);
+                  setNewBpName('');
+                  setNewBpWidth('');
+                }
+              }}
+              style={{
+                height: 26, padding: '0 10px',
+                background: 'var(--color-primary)', color: '#fff',
+                border: 'none', borderRadius: 4,
+                fontSize: 11, fontWeight: 500, cursor: 'pointer',
+              }}
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mode Toggle */}
       {devServerUrl && (
