@@ -438,7 +438,12 @@ export function ComponentPreview({ code, frontmatter, liveTokens, devServerUrl, 
   const activeBreakpoints = customBreakpoints;
 
   const tokensKey = JSON.stringify(tokens);
-  const renderedHtml = useMemo(() => jsxToHtml(code, tokens), [code, tokensKey]);
+  console.log('PREVIEW RENDER - tokens:', tokens, 'key:', tokensKey);
+  const renderedHtml = useMemo(() => {
+    const html = jsxToHtml(code, tokens);
+    console.log('PREVIEW HTML generated, length:', html.length);
+    return html;
+  }, [code, tokensKey]);
 
   const isolatedSrcdoc = useMemo(() => `<!DOCTYPE html>
 <html>

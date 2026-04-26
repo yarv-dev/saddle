@@ -34,9 +34,9 @@ export function EditorView({ component, devServerUrl }: EditorViewProps) {
   const selectedVariant = component.variants[selectedVariantIndex];
 
   useEffect(() => {
-    if (selectedVariant.frontmatter?.tokens) {
-      setLocalTokens(selectedVariant.frontmatter.tokens);
-    }
+    const t = selectedVariant.frontmatter?.tokens || {};
+    console.log('INIT localTokens from frontmatter:', t);
+    setLocalTokens(t);
   }, [selectedVariantIndex]);
 
   const handleTokenChange = async (tokenName: string, value: string) => {
@@ -55,9 +55,11 @@ export function EditorView({ component, devServerUrl }: EditorViewProps) {
     }
 
     const newTokens = { ...localTokens, [tokenName]: value };
+    console.log('TOKEN CHANGE:', tokenName, '=', value, 'all tokens:', newTokens);
     setLocalTokens(newTokens);
     try {
       await updateTokens(selectedVariant.filePath, newTokens);
+      console.log('SAVED to disk:', selectedVariant.filePath);
     } catch (err) {
       console.error('Failed to save tokens:', err);
     }
