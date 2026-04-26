@@ -5,9 +5,10 @@ import { writeComponentFile } from '../lib/tauri';
 interface DashboardViewProps {
   project: ProjectStructure;
   projectRoot: string;
+  onDevServerConnect?: (url: string) => void;
 }
 
-export function DashboardView({ project, projectRoot }: DashboardViewProps) {
+export function DashboardView({ project, projectRoot, onDevServerConnect }: DashboardViewProps) {
   const [devServerUrl, setDevServerUrl] = useState('');
   const [devServerStatus, setDevServerStatus] = useState<'disconnected' | 'checking' | 'connected'>('disconnected');
   const [mcpStatus] = useState<'disconnected' | 'connected'>('disconnected');
@@ -18,6 +19,7 @@ export function DashboardView({ project, projectRoot }: DashboardViewProps) {
     try {
       await fetch(url, { mode: 'no-cors' });
       setDevServerStatus('connected');
+      onDevServerConnect?.(url);
     } catch {
       setDevServerStatus('disconnected');
     }
@@ -30,8 +32,10 @@ export function DashboardView({ project, projectRoot }: DashboardViewProps) {
     for (const port of commonPorts) {
       try {
         await fetch(`http://localhost:${port}`, { mode: 'no-cors' });
-        setDevServerUrl(`http://localhost:${port}`);
+        const url = `http://localhost:${port}`;
+        setDevServerUrl(url);
         setDevServerStatus('connected');
+        onDevServerConnect?.(url);
         return;
       } catch {}
     }

@@ -11,6 +11,7 @@ import { updateTokens, createVariant } from '../lib/tauri';
 interface EditorViewProps {
   component: Component;
   onBack: () => void;
+  devServerUrl?: string;
 }
 
 type Tab = 'style' | 'elements' | 'code' | 'ai' | 'metadata';
@@ -23,7 +24,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'metadata', label: 'Metadata' },
 ];
 
-export function EditorView({ component }: EditorViewProps) {
+export function EditorView({ component, devServerUrl }: EditorViewProps) {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [tab, setTab] = useState<Tab>('style');
   const [localTokens, setLocalTokens] = useState<Record<string, string>>({});
@@ -125,6 +126,7 @@ export function EditorView({ component }: EditorViewProps) {
             code={selectedVariant.code}
             frontmatter={selectedVariant.frontmatter}
             liveTokens={localTokens}
+            devServerUrl={devServerUrl}
           />
         </div>
       </main>

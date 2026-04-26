@@ -64,6 +64,7 @@ export function GalleryView() {
   const [view, setView] = useState<AppView>('components');
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [devServerUrl, setDevServerUrl] = useState<string>('');
 
   const addLog = (type: LogEntry['type'], message: string, source?: string) => {
     setLogs(prev => [...prev, { timestamp: new Date(), type, message, source }]);
@@ -208,10 +209,10 @@ export function GalleryView() {
       return <HierarchyView project={project} projectRoot={projectRoot} onSelectComponent={(c) => { setSelectedComponent(c); setView('components'); }} />;
     }
     if (view === 'dashboard' && project) {
-      return <DashboardView project={project} projectRoot={projectRoot} />;
+      return <DashboardView project={project} projectRoot={projectRoot} onDevServerConnect={(url) => { setDevServerUrl(url); addLog('success', `Connected to dev server: ${url}`, 'devserver'); }} />;
     }
     if (selectedComponent) {
-      return <EditorView component={selectedComponent} onBack={() => setSelectedComponent(null)} />;
+      return <EditorView component={selectedComponent} onBack={() => setSelectedComponent(null)} devServerUrl={devServerUrl || undefined} />;
     }
     return (
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-stage)' }}>
