@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saddle - Component Builder with AI Design Integration</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="demo/app.css">
   <link rel="icon" href="assets/saddle-logo.png">
 </head>
 <body>
@@ -30,154 +31,9 @@
       </div>
     </div>
 
-    <!-- Realistic App Replica -->
+    <!-- Stripped-down version of the real Saddle app -->
     <div class="hero-showcase">
-      <div class="app-replica">
-        <!-- Sidebar -->
-        <div class="r-sidebar">
-          <div class="r-sidebar-header">
-            <img src="assets/saddle-logo.png" height="16" alt="">
-            <span class="r-project-name">demo-lib</span>
-          </div>
-          <div class="r-section-label">Components</div>
-          <div class="r-nav-item active">Button <span class="r-badge">2</span></div>
-          <div class="r-nav-item">Card <span class="r-badge">1</span></div>
-          <div class="r-nav-item">Input <span class="r-badge">1</span></div>
-          <div class="r-nav-item">Badge <span class="r-badge">2</span></div>
-          <div class="r-nav-item">Toggle <span class="r-badge">1</span></div>
-          <div class="r-section-label" style="margin-top:12px">Views</div>
-          <div class="r-nav-item">Hierarchy</div>
-          <div class="r-nav-item">Dashboard</div>
-        </div>
-
-        <!-- Main Stage -->
-        <div class="r-stage">
-          <!-- Variant bar -->
-          <div class="r-variant-bar">
-            <div class="r-variants">
-              <button class="r-variant active">Primary</button>
-              <button class="r-variant">Secondary</button>
-            </div>
-            <button class="r-new-variant">+ New Variant</button>
-          </div>
-
-          <!-- Breakpoints -->
-          <div class="r-breakpoint-bar">
-            <div class="r-bp active" title="Mobile">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
-            </div>
-            <div class="r-bp" title="Tablet">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>
-            </div>
-            <div class="r-bp" title="Desktop">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            </div>
-          </div>
-
-          <!-- Preview -->
-          <div class="r-preview">
-            <div class="r-preview-label">localhost:5173</div>
-            <div class="r-preview-content">
-              <button id="r-button" style="background:#2563eb;color:#fff;padding:12px 24px;border-radius:8px;border:none;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s ease">Get Started</button>
-            </div>
-          </div>
-
-          <!-- Terminal -->
-          <div class="r-terminal">
-            <div class="r-terminal-header">Terminal</div>
-            <div class="r-terminal-log" id="r-log">
-              <div><span class="r-t-time">10:42:01</span> <span class="r-t-ok">Project loaded: demo-lib (5 components)</span></div>
-              <div><span class="r-t-time">10:42:01</span> <span class="r-t-info">File watcher started</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Inspector -->
-        <div class="r-inspector">
-          <div class="r-tabs">
-            <button class="r-tab active">Style</button>
-            <button class="r-tab">Code</button>
-            <button class="r-tab">AI</button>
-          </div>
-          <div class="r-inspector-body">
-            <!-- Fill Section -->
-            <div class="r-accordion open" data-section="fill">
-              <div class="r-accordion-header" onclick="this.parentElement.classList.toggle('open')">
-                <svg class="r-chevron" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
-                <span>Fill</span>
-                <span class="r-prop-count">1</span>
-              </div>
-              <div class="r-accordion-body">
-                <div class="r-prop-row">
-                  <input type="color" id="r-bg-pick" value="#2563eb" oninput="rUpdate()" class="r-color-pick">
-                  <span class="r-prop-label">background</span>
-                  <input class="r-prop-input" id="r-bg" value="#2563eb" oninput="rUpdate()">
-                  <button class="r-token-btn" onclick="rPickToken('r-bg','#2563eb')">token</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Typography Section -->
-            <div class="r-accordion open" data-section="type">
-              <div class="r-accordion-header" onclick="this.parentElement.classList.toggle('open')">
-                <svg class="r-chevron" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
-                <span>Typography</span>
-                <span class="r-prop-count">3</span>
-              </div>
-              <div class="r-accordion-body">
-                <div class="r-prop-row">
-                  <input type="color" id="r-color-pick" value="#ffffff" oninput="rUpdate()" class="r-color-pick">
-                  <span class="r-prop-label">color</span>
-                  <input class="r-prop-input" id="r-color" value="#ffffff" oninput="rUpdate()">
-                </div>
-                <div class="r-prop-row">
-                  <span class="r-prop-label" style="margin-left:22px">fontSize</span>
-                  <input class="r-prop-input" id="r-fs" value="15px" oninput="rUpdate()">
-                </div>
-                <div class="r-prop-row">
-                  <span class="r-prop-label" style="margin-left:22px">fontWeight</span>
-                  <input class="r-prop-input" id="r-fw" value="600" oninput="rUpdate()">
-                </div>
-              </div>
-            </div>
-
-            <!-- Spacing Section -->
-            <div class="r-accordion open" data-section="spacing">
-              <div class="r-accordion-header" onclick="this.parentElement.classList.toggle('open')">
-                <svg class="r-chevron" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
-                <span>Spacing</span>
-                <span class="r-prop-count">1</span>
-              </div>
-              <div class="r-accordion-body">
-                <div class="r-prop-row">
-                  <span class="r-prop-label" style="margin-left:22px">padding</span>
-                  <input class="r-prop-input" id="r-pad" value="12px 24px" oninput="rUpdate()">
-                </div>
-              </div>
-            </div>
-
-            <!-- Stroke Section -->
-            <div class="r-accordion open" data-section="stroke">
-              <div class="r-accordion-header" onclick="this.parentElement.classList.toggle('open')">
-                <svg class="r-chevron" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
-                <span>Stroke</span>
-                <span class="r-prop-count">1</span>
-              </div>
-              <div class="r-accordion-body">
-                <div class="r-prop-row">
-                  <span class="r-prop-label" style="margin-left:22px">borderRadius</span>
-                  <input class="r-prop-input" id="r-br" value="8px" oninput="rUpdate()">
-                </div>
-              </div>
-            </div>
-
-            <!-- + Add -->
-            <div style="padding:8px 12px">
-              <button class="r-add-btn">+ Add property</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="saddle-demo"></div>
     </div>
   </section>
 
@@ -262,53 +118,6 @@
     </div>
   </footer>
 
-  <script>
-  function rUpdate() {
-    var bg = document.getElementById('r-bg').value;
-    var color = document.getElementById('r-color').value;
-    var pad = document.getElementById('r-pad').value;
-    var br = document.getElementById('r-br').value;
-    var fs = document.getElementById('r-fs').value;
-    var fw = document.getElementById('r-fw').value;
-
-    // Sync pickers
-    if (bg.match(/^#[0-9a-f]{6}$/i)) document.getElementById('r-bg-pick').value = bg;
-    if (color.match(/^#[0-9a-f]{6}$/i)) document.getElementById('r-color-pick').value = color;
-    if (document.activeElement === document.getElementById('r-bg-pick')) {
-      bg = document.getElementById('r-bg-pick').value;
-      document.getElementById('r-bg').value = bg;
-    }
-    if (document.activeElement === document.getElementById('r-color-pick')) {
-      color = document.getElementById('r-color-pick').value;
-      document.getElementById('r-color').value = color;
-    }
-
-    // Update preview button
-    var btn = document.getElementById('r-button');
-    btn.style.backgroundColor = bg;
-    btn.style.color = color;
-    btn.style.padding = pad;
-    btn.style.borderRadius = br;
-    btn.style.fontSize = fs;
-    btn.style.fontWeight = fw;
-
-    // Log change
-    var log = document.getElementById('r-log');
-    var now = new Date().toTimeString().split(' ')[0];
-    var entry = document.createElement('div');
-    entry.innerHTML = '<span class="r-t-time">' + now + '</span> <span class="r-t-ok">Token saved → Button.Primary.tsx</span>';
-    log.appendChild(entry);
-    log.scrollTop = log.scrollHeight;
-  }
-
-  function rPickToken(inputId, fallback) {
-    var colors = ['#2563eb','#dc2626','#16a34a','#7c3aed','#ea580c','#0891b2','#1d1d1f'];
-    var current = document.getElementById(inputId).value;
-    var idx = colors.indexOf(current);
-    var next = colors[(idx + 1) % colors.length];
-    document.getElementById(inputId).value = next;
-    rUpdate();
-  }
-  </script>
+  <script src="demo/app.js"></script>
 </body>
 </html>
