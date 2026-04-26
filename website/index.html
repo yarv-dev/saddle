@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saddle - Component Builder with AI Design Integration</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="demo/demo.css">
   <link rel="icon" href="/assets/saddle-logo.png">
 </head>
 <body>
@@ -77,6 +78,29 @@
     </div>
   </section>
 
+  <!-- Live Demo -->
+  <section id="demo" class="live-demo">
+    <div class="section-inner">
+      <h2>Try it live</h2>
+      <p class="section-sub">Edit token values below and watch the component update in real time.</p>
+
+      <div class="demo-app">
+        <div class="demo-sidebar" id="demo-sidebar"></div>
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+          <div class="demo-stage" id="demo-stage"></div>
+          <div class="demo-terminal">
+            <div class="demo-terminal-header">
+              <span>Terminal</span>
+              <span id="demo-terminal-count"></span>
+            </div>
+            <div class="demo-terminal-log" id="demo-terminal-log"></div>
+          </div>
+        </div>
+        <div class="demo-inspector" id="demo-inspector"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- How It Works -->
   <section id="how-it-works" class="how-it-works">
     <div class="section-inner">
@@ -140,5 +164,6 @@
       <a href="https://github.com/yarv-dev/saddle">GitHub</a>
     </div>
   </footer>
+  <script src="demo/demo.js"></script>
 </body>
 </html>

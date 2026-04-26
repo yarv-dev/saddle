@@ -180,6 +180,10 @@ h2 {
   line-height: 1.6;
 }
 
+/* Live Demo */
+.live-demo { padding: 100px 0; background: var(--surface); }
+.live-demo .demo-app { max-width: 1100px; margin: 0 auto; }
+
 /* How It Works */
 .how-it-works {
   padding: 100px 0;
